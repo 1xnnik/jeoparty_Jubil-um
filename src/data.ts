@@ -20,7 +20,6 @@ export type Game = {
   step: number;
   history: { team: string; delta: number }[];
   logo: string;
-  sound: boolean;
 };
 const samples = [
   [
@@ -177,7 +176,6 @@ export function freshGame(): Game {
     step: 100,
     history: [],
     logo: logoUrl,
-    sound: false,
   };
 }
 export function validateBoards(input: unknown): Board[] {

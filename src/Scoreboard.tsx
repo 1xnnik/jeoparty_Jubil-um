@@ -5,7 +5,6 @@ type Props = {
   active?: Question;
   storageError: boolean;
   setGame: Dispatch<SetStateAction<Game>>;
-  undo: () => void;
   changeScore: (id: string, sign: number) => void;
 };
 export function Scoreboard({
@@ -13,7 +12,6 @@ export function Scoreboard({
   active,
   storageError,
   setGame,
-  undo,
   changeScore,
 }: Props) {
   return (
@@ -21,7 +19,6 @@ export function Scoreboard({
       <div className="score-heading">
         <div>
           <span className="eyebrow">PUNKTESTÄNDE</span>
-          <span className="manual">Nur manuell. Ihr habt das letzte Wort.</span>
         </div>
         <div className="score-tools">
           {active ? (
@@ -44,9 +41,7 @@ export function Scoreboard({
               </select>
             </label>
           )}
-          <button disabled={!game.history.length} onClick={undo}>
-            ↶ Rückgängig
-          </button>
+
         </div>
       </div>
       <div
@@ -96,8 +91,6 @@ export function Scoreboard({
         ))}
       </div>
       <div className="bottom-line">
-        <span>JUGENDHAUS BAD IMNAU E. V.</span>
-        <span>40 JAHRE • EIN WIR</span>
         <span>
           {storageError ? "⚠ Nicht gespeichert" : "● Lokal gespeichert"}
         </span>

@@ -811,3 +811,6 @@ main {
 }
 
 @media (min-width: 901px) { .play-main { display:flex; flex-direction:column; overflow:hidden; } .play-main .board-heading,.play-main .board-footer { flex-shrink:0; } .play-main .board { flex:1; min-height:0; } .play-main .category { min-height:0; grid-template-rows: minmax(38px, .8fr) repeat(5,minmax(0,1fr)); } .play-main .tile { font-size:clamp(24px,3.5vh,42px); } .play-main .board-footer { margin-bottom:5px; } }
+
+.bottom-line { justify-content: flex-end; }
+.board-heading > div > .eyebrow { text-transform: none; }

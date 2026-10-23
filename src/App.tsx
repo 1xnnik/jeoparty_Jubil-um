@@ -41,16 +41,12 @@ export default function App() {
   const [game, setGame] = useState<Game>(load),
     [screen, setScreen] = useState<"play" | "editor" | "teams">("play"),
     [answer, setAnswer] = useState(false),
-    [seconds, setSeconds] = useState(30),
-    [running, setRunning] = useState(false),
-    [duration, setDuration] = useState(30),
     [notice, setNotice] = useState(""),
     [editBoard, setEditBoard] = useState(0),
     [editCategory, setEditCategory] = useState(0),
     [editQuestion, setEditQuestion] = useState(0),
     [storageError, setStorageError] = useState(false);
-  const importRef = useRef<HTMLInputElement>(null),
-    audio = useRef<AudioContext | null>(null);
+  const importRef = useRef<HTMLInputElement>(null);
   const active = game.boards
     .flatMap((b) => b.categories.flatMap((c) => c.questions))
     .find((q) => q.id === game.active);
@@ -75,29 +71,6 @@ export default function App() {
     const t = setTimeout(() => setNotice(""), 4500);
     return () => clearTimeout(t);
   }, [notice]);
-  useEffect(() => {
-    if (!running) return;
-    const t = setInterval(() => setSeconds((s) => Math.max(0, s - 1)), 1000);
-    return () => clearInterval(t);
-  }, [running]);
-  useEffect(() => {
-    if (seconds === 0 && running) {
-      setRunning(false);
-      if (game.sound) {
-        const ctx = audio.current ?? new AudioContext();
-        audio.current = ctx;
-        const o = ctx.createOscillator(),
-          v = ctx.createGain();
-        o.connect(v);
-        v.connect(ctx.destination);
-        v.gain.setValueAtTime(0.12, ctx.currentTime);
-        v.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.6);
-        o.frequency.value = 660;
-        o.start();
-        o.stop(ctx.currentTime + 0.6);
-      }
-    }
-  }, [seconds, running, game.sound]);
   function changeScore(id: string, sign: number) {
     const delta = (active?.value ?? game.step) * sign;
     setGame((g) => ({
@@ -108,25 +81,9 @@ export default function App() {
       history: [...g.history, { team: id, delta }],
     }));
   }
-  function undo() {
-    setGame((g) => {
-      const last = g.history.at(-1);
-      return last
-        ? {
-            ...g,
-            teams: g.teams.map((t) =>
-              t.id === last.team ? { ...t, score: t.score - last.delta } : t,
-            ),
-            history: g.history.slice(0, -1),
-          }
-        : g;
-    });
-  }
   function open(q: Question) {
     setGame((g) => ({ ...g, active: q.id }));
     setAnswer(false);
-    setSeconds(duration);
-    setRunning(false);
   }
   function close() {
     if (active)
@@ -136,7 +93,6 @@ export default function App() {
         played: [...new Set([...g.played, active.id])],
       }));
     setAnswer(false);
-    setRunning(false);
   }
   function reset() {
     if (
@@ -152,7 +108,6 @@ export default function App() {
         active: null,
         history: [],
       }));
-      setRunning(false);
       setScreen("play");
     }
   }
@@ -186,7 +141,6 @@ export default function App() {
         )
       ) {
         setGame((g) => ({ ...g, boards, played: [], active: null }));
-        setRunning(false);
         setNotice("50 Fragen importiert.");
       }
     } catch (e) {
@@ -252,21 +206,9 @@ export default function App() {
           <button onClick={() => void fullscreen()} title="Vollbildmodus">
             ⛶ <span>Vollbild</span>
           </button>
-          <button
-            aria-label={game.sound ? "Sound ausschalten" : "Sound einschalten"}
-            onClick={() => {
-              if (!game.sound) {
-                audio.current ??= new AudioContext();
-                void audio.current.resume();
-              }
-              setGame((g) => ({ ...g, sound: !g.sound }));
-            }}
-          >
-            {game.sound ? "♪ Sound an" : "♪ Sound aus"}
-          </button>
+
         </div>
         <h1>40 JAHRE JUGENDHAUS BAD IMNAU</h1>
-        <p>Vier Jahrzehnte. Unzählige Geschichten. Ein legendärer Abend.</p>
       </header>
       <nav>
         <div className="tabs">
@@ -295,7 +237,6 @@ export default function App() {
             onClick={() => {
               setGame(load());
               setScreen("play");
-              setRunning(false);
               setNotice("Gespeichertes Spiel fortgesetzt.");
             }}
           >
@@ -321,12 +262,7 @@ export default function App() {
           <>
             <div className="board-heading">
               <div>
-                <div className="eyebrow">DAS JUBILÄUMS-QUIZ</div>
-                <h2>
-                  {active
-                    ? "Die nächste Geschichte wartet."
-                    : "Bühne frei für euer Wissen."}
-                </h2>
+                <div className="eyebrow">Das Jubiläums Jeoparty</div>
               </div>
               <div className="board-switch">
                 {game.boards.map((b, i) => (
@@ -377,7 +313,8 @@ export default function App() {
                 {active.video && (
                   <video
                     key={active.video}
-                    muted={!game.sound}
+                    muted
+                    onVolumeChange={(e) => { e.currentTarget.muted = true; }}
                     controls
                     src={active.video}
                     preload="metadata"
@@ -390,39 +327,6 @@ export default function App() {
                   </div>
                 )}
                 <div className="question-controls">
-                  <div
-                    className={seconds === 0 ? "timer expired" : "timer"}
-                    role="timer"
-                  >
-                    {Math.floor(seconds / 60)}:
-                    {String(seconds % 60).padStart(2, "0")}
-                  </div>
-                  <label className="compact">
-                    Sekunden
-                    <input
-                      type="number"
-                      min="1"
-                      max="3600"
-                      disabled={running}
-                      value={duration}
-                      onChange={(e) => {
-                        const n = Math.min(
-                          3600,
-                          Math.max(1, Number(e.target.value)),
-                        );
-                        setDuration(n);
-                        setSeconds(n);
-                      }}
-                    />
-                  </label>
-                  <button
-                    onClick={() => {
-                      if (seconds === 0) setSeconds(duration);
-                      setRunning((v) => !v);
-                    }}
-                  >
-                    {running ? "Pause" : "Countdown starten"}
-                  </button>
                   <button className="gold" onClick={() => setAnswer((v) => !v)}>
                     {answer ? "Antwort verbergen" : "Antwort anzeigen"}
                   </button>
@@ -468,7 +372,6 @@ export default function App() {
                       ? "Board abgeschlossen — bereit für die nächste Runde!"
                       : "Wählt ein Punktefeld. Schreibt Geschichte."}
                   </span>
-                  <span>★ 40 Jahre miteinander</span>
                 </div>
               </>
             )}
@@ -724,7 +627,6 @@ export default function App() {
         active={active}
         storageError={storageError}
         setGame={setGame}
-        undo={undo}
         changeScore={changeScore}
       />
     </div>

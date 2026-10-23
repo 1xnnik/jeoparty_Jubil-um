@@ -1,5 +1,5 @@
 import { test, expect } from "@playwright/test";
-test("manual scoring, undo, answered questions, persistence and board change", async ({
+test("manual scoring, answered questions, persistence and board change", async ({
   page,
 }) => {
   await page.goto("/");
@@ -24,7 +24,7 @@ test("manual scoring, undo, answered questions, persistence and board change", a
     .getByRole("button", { name: "JZ Punkte abziehen", exact: true })
     .click();
   await expect(page.locator(".score").first()).toHaveText("-300");
-  await page.getByRole("button", { name: "↶ Rückgängig" }).click();
+  await page.getByRole("button", { name: "JZ Punkte hinzufügen", exact: true }).click();
   await expect(page.locator(".score").first()).toHaveText("0");
   await page.getByRole("button", { name: "Zum Board ✓" }).click();
   await expect(page.locator(".played")).toHaveCount(1);
@@ -93,7 +93,7 @@ test("editor, teams, JSON import validation and reset safety", async ({
     "Unsere Geschichten",
   );
 });
-test("local-only assets, mobile layout and countdown", async ({ page }) => {
+test("local-only assets, mobile layout and reduced question controls", async ({ page }) => {
   const external: string[] = [];
   page.on("request", (r) => {
     if (
@@ -106,11 +106,11 @@ test("local-only assets, mobile layout and countdown", async ({ page }) => {
   await page
     .getByRole("button", { name: "Unser Jugendhaus, 100 Punkte", exact: true })
     .click();
-  await page.getByLabel("Sekunden", { exact: true }).fill("1");
-  await page
-    .getByRole("button", { name: "Countdown starten", exact: true })
-    .click();
-  await expect(page.getByRole("timer")).toHaveText("0:00");
+  await expect(page.getByRole("timer")).toHaveCount(0);
+  await expect(page.getByRole("button", { name: /Sound|Countdown|Rückgängig/ })).toHaveCount(0);
+  await expect(page.getByText("Das Jubiläums Jeoparty", { exact: true })).toBeVisible();
+  await expect(page.getByText("Vier Jahrzehnte.", { exact: false })).toHaveCount(0);
+  await expect(page.getByText("Bühne frei für euer Wissen.", { exact: true })).toHaveCount(0);
   await page.setViewportSize({ width: 390, height: 844 });
   expect(
     await page.evaluate(

@@ -26,18 +26,17 @@ Nach der Installation benötigt das laufende Spiel keine Internetverbindung. All
 2. Im **Frageneditor** alle Fragen prüfen. Vereinsfragen sind ausdrücklich Vorlagen und müssen mit echten Vereinsgeschichten ergänzt werden.
 3. Das Original-Logo aus `media/logo.png` ist fest eingebunden und funktioniert auch offline. Bereits gespeicherte Spiele mit dem alten Platzhalter übernehmen es automatisch. Ein optionaler Logo-Upload im Editor überschreibt das Standardlogo nur im aktuellen Browser. Logos bleiben unverzerrt und auf allen Ansichten sichtbar.
 4. Fragen als JSON exportieren und separat sichern. JSON enthält beide Boards und eingebettete Medien, aber keine Teams, Punkte oder Logo.
-5. Ein komplettes Testspiel auf dem Veranstaltungsgerät durchführen und Lautstärke/Beamer prüfen.
+5. Ein komplettes Testspiel auf dem Veranstaltungsgerät durchführen und Beamer prüfen.
 
 ## Bedienung
 
 - Ein Punktefeld öffnet die Frage. Die Antwort lässt sich separat anzeigen und verbergen.
 - **+ / −** ändern ausschließlich das gewählte Team um den aktiven Fragewert. Ohne aktive Frage gilt der ausgewählte Punkteschritt. Negative Punkte sind erlaubt.
-- **Rückgängig** nimmt die letzte Punkteänderung zurück, auch über Fragen und Boards hinweg.
 - **Zum Board** markiert die Frage als gespielt. Das Öffnen oder Anzeigen der Antwort vergibt keine Punkte.
 - Board 2 übernimmt alle Punktestände; ein vorzeitiger Wechsel fragt nach.
-- Countdown ist frei einstellbar; Sound ist standardmäßig aus. Eingebettete Videos haben eigene Browser-Lautstärkeregler.
-- Spielstand wird nach Änderungen automatisch gespeichert. **Speichern** bestätigt das explizit, **Fortsetzen** lädt den letzten lokalen Stand. Beim Neuladen wird auch eine aktive Frage wieder geöffnet; Countdown und Antwortanzeige starten zurückgesetzt.
-- **Neues Spiel** setzt erst nach Bestätigung Punkte, gespielte Fragen und Undo zurück; Teams, Fragen und Logo bleiben erhalten.
+- Die Anwendung hat keinen Timer und keinen Sound. Eingebettete Videos werden dauerhaft stumm wiedergegeben.
+- Spielstand wird nach Änderungen automatisch gespeichert. **Speichern** bestätigt das explizit, **Fortsetzen** lädt den letzten lokalen Stand. Beim Neuladen wird auch eine aktive Frage wieder geöffnet; die Antwortanzeige startet zurückgesetzt.
+- **Neues Spiel** setzt erst nach Bestätigung Punkte und gespielte Fragen zurück; Teams, Fragen und Logo bleiben erhalten.
 
 ## Medien und JSON
 
@@ -60,4 +59,4 @@ npm run build
 npx playwright test
 ```
 
-Die Browserprüfungen verwenden Chromium unter `/usr/bin/chromium`. Auf anderen Geräten den Pfad in `playwright.config.ts` anpassen oder `executablePath` entfernen und `npx playwright install chromium` ausführen. Die Tests decken manuelle Punkte, Undo, Speicherung, Boardwechsel, Editor, Importfehler, Reset-Bestätigung, Countdown und mobiles Layout ab.
+Die Browserprüfungen verwenden Chromium unter `/usr/bin/chromium`. Auf anderen Geräten den Pfad in `playwright.config.ts` anpassen oder `executablePath` entfernen und `npx playwright install chromium` ausführen. Die Tests decken manuelle Punkte, Speicherung, Boardwechsel, Editor, Importfehler, Reset-Bestätigung, die reduzierte Oberfläche und mobiles Layout ab.
