@@ -2,6 +2,12 @@
 
 Lokale React-/TypeScript-Anwendung für die Moderation am Laptop und Präsentation auf dem Beamer. Zwei Boards mit je fünf Kategorien und fünf Fragen; Punkte werden ausschließlich manuell vergeben.
 
+## Windows: Start und Stop per Doppelklick
+
+ZIP vollstaendig entpacken und Node.js 24 installieren. Dann **Start.bat** doppelklicken. Beim ersten Start werden die Abhaengigkeiten automatisch installiert (Internet erforderlich), danach oeffnet sich das Spiel im Browser. Das Konsolenfenster schliesst sich bei Erfolg automatisch; der Server laeuft im Hintergrund weiter.
+
+**Stop.bat** beendet nur den mit Start.bat gestarteten Server dieses Projektordners. Browser-Spielstaende bleiben erhalten. Ein erneuter Start oeffnet ein bereits laufendes Spiel, statt einen zweiten Server zu starten. Bei Fehlern bleibt das Fenster offen; weitere Details stehen in `.jeopardy-runtime/server.log`. Falls bereits ein manuell gestarteter Server Port 5173 belegt, diesen zuerst mit Strg+C in seinem Terminal beenden.
+
 ## Starten
 
 Node.js 22.12+ oder 24 und npm verwenden.
