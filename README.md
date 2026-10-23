@@ -24,7 +24,7 @@ Nach der Installation benötigt das laufende Spiel keine Internetverbindung. All
 
 1. Unter **Teams** zwei bis sechs Teamnamen einstellen.
 2. Im **Frageneditor** alle Fragen prüfen. Vereinsfragen sind ausdrücklich Vorlagen und müssen mit echten Vereinsgeschichten ergänzt werden.
-3. Das Original-Logo im Editor als lokale Bilddatei hochladen. `public/logo.svg` ist ein beschrifteter Platzhalter, da das Chatbild nicht als Datei im Checkout vorlag. Alternativ diese Datei durch das Original ersetzen und den Standardpfad in `src/data.ts` anpassen. Logos bleiben unverzerrt und auf allen Ansichten sichtbar.
+3. Das Original-Logo aus `media/logo.png` ist fest eingebunden und funktioniert auch offline. Bereits gespeicherte Spiele mit dem alten Platzhalter übernehmen es automatisch. Ein optionaler Logo-Upload im Editor überschreibt das Standardlogo nur im aktuellen Browser. Logos bleiben unverzerrt und auf allen Ansichten sichtbar.
 4. Fragen als JSON exportieren und separat sichern. JSON enthält beide Boards und eingebettete Medien, aber keine Teams, Punkte oder Logo.
 5. Ein komplettes Testspiel auf dem Veranstaltungsgerät durchführen und Lautstärke/Beamer prüfen.
 

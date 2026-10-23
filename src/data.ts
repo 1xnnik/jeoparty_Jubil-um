@@ -1,3 +1,5 @@
+import logoUrl from "../media/logo.png";
+
 export type Question = {
   id: string;
   value: number;
@@ -174,7 +176,7 @@ export function freshGame(): Game {
     active: null,
     step: 100,
     history: [],
-    logo: "/logo.svg",
+    logo: logoUrl,
     sound: false,
   };
 }

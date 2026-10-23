@@ -30,7 +30,7 @@ function load(): Game {
         ![0, 1].includes(g.board)
       )
         throw Error();
-      return { ...freshGame(), ...g };
+      return { ...freshGame(), ...g, logo: !g.logo || g.logo === "/logo.svg" ? freshGame().logo : g.logo };
     }
   } catch {
     /* Invalid saved state falls back to a fresh game. */
@@ -712,8 +712,8 @@ export default function App() {
               </label>
               <p>
                 Das Logo wird lokal gespeichert und auf allen Ansichten
-                angezeigt. Für eine feste Datei public/logo.svg ersetzen oder
-                den Pfad im Code anpassen.
+                angezeigt. Standardmäßig ist das Jugendhaus-Logo aus media/logo.png
+                fest eingebunden. Ein Upload ersetzt es nur in diesem Browser.
               </p>
             </div>
           </section>
