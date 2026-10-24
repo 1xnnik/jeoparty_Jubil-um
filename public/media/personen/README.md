@@ -8,4 +8,4 @@ Die fünf Originalbilder sind lokal eingebunden:
 - wolfgang-petry.png — 400 Punkte
 - leon.png — 500 Punkte (schwer)
 
-Die Bilder werden über 60 Sekunden automatisch scharf. Alte gespeicherte oder importierte Fragen mit den früheren .jpg-Platzhalterpfaden werden auf die entsprechenden .png-Dateien umgestellt. Eigene Bilder und Fragen bleiben erhalten.
+Die Bilder werden über 10 Sekunden automatisch scharf. Alte gespeicherte oder importierte Fragen mit den früheren .jpg-Platzhalterpfaden werden auf die entsprechenden .png-Dateien umgestellt. Eigene Bilder und Fragen bleiben erhalten.

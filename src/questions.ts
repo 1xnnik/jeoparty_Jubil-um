@@ -14,7 +14,7 @@ export const defaultBoards: Board[] = [
             answer: "Matthias Steiner",
             image: "/media/personen/matthias-steiner.png",
             reveal: true,
-            revealSeconds: 60,
+            revealSeconds: 10,
           },
           {
             id: "0-0-1",
@@ -23,7 +23,7 @@ export const defaultBoards: Board[] = [
             answer: "Wolfgang Grupp",
             image: "/media/personen/wolfgang-grupp.png",
             reveal: true,
-            revealSeconds: 60,
+            revealSeconds: 10,
           },
           {
             id: "0-0-2",
@@ -32,7 +32,7 @@ export const defaultBoards: Board[] = [
             answer: "Thomas Müller",
             image: "/media/personen/thomas-mueller.png",
             reveal: true,
-            revealSeconds: 60,
+            revealSeconds: 10,
           },
           {
             id: "0-0-3",
@@ -41,7 +41,7 @@ export const defaultBoards: Board[] = [
             answer: "Wolfgang Petry",
             image: "/media/personen/wolfgang-petry.png",
             reveal: true,
-            revealSeconds: 60,
+            revealSeconds: 10,
           },
           {
             id: "0-0-4",
@@ -50,7 +50,7 @@ export const defaultBoards: Board[] = [
             answer: "Leon",
             image: "/media/personen/leon.png",
             reveal: true,
-            revealSeconds: 60,
+            revealSeconds: 10,
           },
         ],
       },

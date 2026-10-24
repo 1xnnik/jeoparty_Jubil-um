@@ -211,7 +211,7 @@ test("person pictures reveal slowly, pause, restart and show the answer without 
   await expect(
     page.getByRole("button", { name: "Enthüllung pausieren", exact: true }),
   ).toBeEnabled();
-  await page.clock.runFor(10000);
+  await page.clock.runFor(2000);
   const blur = () =>
     picture.evaluate((el) =>
       Number(getComputedStyle(el).filter.match(/[\d.]+/)?.[0]),
@@ -223,7 +223,7 @@ test("person pictures reveal slowly, pause, restart and show the answer without 
     .getByRole("button", { name: "Enthüllung pausieren", exact: true })
     .click();
   const paused = await blur();
-  await page.clock.runFor(10000);
+  await page.clock.runFor(2000);
   expect(await blur()).toBeCloseTo(paused, 1);
   await page
     .getByRole("button", { name: "Bild zurücksetzen", exact: true })
@@ -232,7 +232,7 @@ test("person pictures reveal slowly, pause, restart and show the answer without 
   await page
     .getByRole("button", { name: "Bild langsam enthüllen", exact: true })
     .click();
-  await page.clock.runFor(61000);
+  await page.clock.runFor(11000);
   expect(await blur()).toBe(0);
   await page
     .getByRole("button", { name: "Antwort anzeigen", exact: true })
@@ -320,7 +320,7 @@ test("new question set preserves saved edits until confirmed and exports media s
     "Wolfgang Petry",
     "Leon",
   ]);
-  expect(data.boards[0].categories[0].questions[0].revealSeconds).toBe(60);
+  expect(data.boards[0].categories[0].questions[0].revealSeconds).toBe(10);
   expect(
     data.boards[0].categories[1].questions.filter((q: any) => q.audio),
   ).toHaveLength(5);

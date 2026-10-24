@@ -24,6 +24,7 @@ export type Game = {
   step: number;
   history: { team: string; delta: number }[];
   logo: string;
+  revealTimingVersion?: number;
 };
 export function freshGame(): Game {
   return {
@@ -39,6 +40,7 @@ export function freshGame(): Game {
     step: 100,
     history: [],
     logo: logoUrl,
+    revealTimingVersion: 1,
   };
 }
 // Repair only the five previously shipped JPG placeholders; preserve custom images.

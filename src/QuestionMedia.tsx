@@ -14,7 +14,7 @@ export function QuestionMedia({
   const [progress, setProgress] = useState(0);
   const [running, setRunning] = useState(false);
   const elapsed = useRef(0);
-  const duration = (question.revealSeconds ?? 60) * 1000;
+  const duration = (question.revealSeconds ?? 10) * 1000;
   useEffect(() => {
     if (!running || showAnswer) return;
     let frame: number;

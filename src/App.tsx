@@ -21,6 +21,13 @@ function load(): Game {
     if (s) {
       const g = JSON.parse(s);
       g.boards = validateBoards(g.boards);
+      if (g.revealTimingVersion !== 1) {
+        const portraits = freshGame().boards[0].categories[0].questions;
+        for (const b of g.boards) for (const c of b.categories) for (const q of c.questions) {
+          if (q.reveal && q.revealSeconds === 60 && portraits.some(p => p.image === q.image)) q.revealSeconds = 10;
+        }
+        g.revealTimingVersion = 1;
+      }
       if (
         !Array.isArray(g.teams) ||
         g.teams.length < 2 ||
@@ -670,7 +677,7 @@ export default function App() {
                     type="number"
                     min="5"
                     max="180"
-                    value={selected.revealSeconds ?? 60}
+                    value={selected.revealSeconds ?? 10}
                     onChange={(e) =>
                       editQ({
                         revealSeconds: Math.max(
