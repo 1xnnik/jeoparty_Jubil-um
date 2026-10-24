@@ -309,7 +309,7 @@ export const defaultBoards: Board[] = [
           {
             id: "0-2-4",
             value: 500,
-            text: "Wie schnell wurde die Marathondistanz beim Sub-2-Stunden-Lauf von Eliud Kipchoge 2019 in Wien bewältigt?",
+            text: "Wie lange brauchte Eliud Kipchoge für seinen Marathonlauf in Wien 2019?",
             answer:
               "1:59:40,2 Stunden. Sonderlauf unter optimierten Bedingungen, kein offizieller Wettkampf-Weltrekord.",
           },

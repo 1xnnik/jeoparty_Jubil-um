@@ -71,6 +71,11 @@ export function migrateStandardBoards(game: Game): Game | null {
   const boards = game.boards.map((board) => ({
     ...board,
     categories: board.categories.map((category) => {
+      const oldMarathonText = "Wie schnell wurde die Marathondistanz beim Sub-2-Stunden-Lauf von Eliud Kipchoge 2019 in Wien bewältigt?";
+      if (category.questions.some(q => q.id === "0-2-4" && q.text === oldMarathonText)) {
+        const updatedQuestion = targets.flatMap(c => c.questions).find(q => q.id === "0-2-4")!;
+        return {...category, questions:category.questions.map(q => q.id === "0-2-4" && q.text === oldMarathonText ? {...q,text:updatedQuestion.text} : q)};
+      }
       if (
         !shipped.some(
           (old) => normalizeCategory(old) === normalizeCategory(category),
