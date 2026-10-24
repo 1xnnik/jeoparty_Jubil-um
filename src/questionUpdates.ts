@@ -1,3 +1,4 @@
+import { incorrectBoardTwo } from "./incorrectBoardTwo";
 import { previousBoardTwo } from "./previousBoardTwo";
 import type { Board, Game } from "./data";
 import { defaultBoards } from "./questions";
@@ -54,9 +55,13 @@ export function updatedGame(game: Game): Game {
 }
 
 export function hasPreviousBoardTwo(boards: Board[]) {
-  return normalized([boards[1]]) === normalized([previousBoardTwo]);
+  return normalized([boards[1]]) === normalized([previousBoardTwo]) || normalized([boards[1]]) === normalized([incorrectBoardTwo]);
 }
 export function refreshBoardTwo(game: Game): Game {
-  const oldIds = new Set(game.boards[1].categories.flatMap(c => c.questions.map(q => q.id)));
-  return {...game,boards:[game.boards[0],structuredClone(defaultBoards[1])],played:game.played.filter(id => !oldIds.has(id)),active:game.active && oldIds.has(game.active) ? null : game.active};
+  const newQuestions = defaultBoards[1].categories.flatMap(c => c.questions);
+  const changedIds = new Set(game.boards[1].categories.flatMap(c => c.questions).filter(q => {
+    const next = newQuestions.find(n => n.id === q.id);
+    return !next || next.text !== q.text || next.answer !== q.answer || next.value !== q.value;
+  }).map(q => q.id));
+  return {...game,boards:[game.boards[0],structuredClone(defaultBoards[1])],played:game.played.filter(id => !changedIds.has(id)),active:game.active && changedIds.has(game.active) ? null : game.active};
 }

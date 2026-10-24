@@ -88,6 +88,6 @@ Alle fünf Songs sind als echte MP3s unter `public/media/songs/song-1.mp3` bis `
 
 Die fünf Jugendhaus-Fragen verwenden eure Angaben: 131 Mitglieder (Bezugszeitpunkt noch im Editor ergänzen), Renovierung 2015, Besucherrekord bei der Karibischen Nacht 2022 mit rund 900 Gästen, 20. Karibische Nacht im Jahr 2022 sowie Sonja Schramm als Vorstand 2007.
 
-### Neue Fragen auf Board 2
+### Gezielte Änderungen auf Board 2
 
-Alle 25 Fragen auf Board 2 wurden ausgetauscht; die fünf Kategorien bleiben erhalten. Ein unverändertes vorheriges Board 2 wird beim Laden nach lokaler Sicherung automatisch aktualisiert. Board 1, Teamnamen und Punkte bleiben dabei erhalten; nur die gespielten Felder und eine aktive Frage von Board 2 werden zurückgesetzt. Eigene Änderungen auf Board 2 werden nicht automatisch überschrieben.
+Nur acht markierte Fragen sind neu: **Damals & heute** 100, 200 und 400; **Filmreif** 100, 200, 300 und 400; **Kurios, aber wahr** 500. Die übrigen 17 Fragen entsprechen wieder dem ursprünglichen Set. Ein gespeichertes unverändertes ursprüngliches Board 2 oder das versehentlich veröffentlichte vollständig ersetzte Board 2 wird nach lokaler Sicherung automatisch auf diese Auswahl korrigiert. Board 1, Teams und Punkte bleiben erhalten. Nur die tatsächlich geänderten Felder werden wieder spielbar. Eigene Änderungen auf Board 2 werden nicht automatisch überschrieben.

@@ -451,26 +451,28 @@ test("custom old save offers a visible update and backs up edits before replacem
   ).toBe("Meine eigene Frage");
 });
 
-test('updated Board 2 replaces all 25 standard questions and preserves Board 1 and scores', async ({page}) => {
+test('updated Board 2 changes only eight crossed-out questions and preserves Board 1 and scores', async ({page}) => {
   const {previousBoardTwo}=await import('../src/previousBoardTwo');
+  const {incorrectBoardTwo}=await import('../src/incorrectBoardTwo');
   const {defaultBoards}=await import('../src/questions');
   const oldQuestions=previousBoardTwo.categories.flatMap(c=>c.questions);
   const newQuestions=defaultBoards[1].categories.flatMap(c=>c.questions);
   expect(newQuestions).toHaveLength(25);
-  newQuestions.forEach((q,i)=>expect(q.text).not.toBe(oldQuestions[i].text));
+  const changed=new Set(['1-2-0','1-2-1','1-2-3','1-3-0','1-3-1','1-3-2','1-3-3','1-4-4']);
+  newQuestions.forEach((q,i)=>{if(changed.has(q.id))expect(q.text).not.toBe(oldQuestions[i].text);else expect(q).toEqual(oldQuestions[i]);});
   await page.goto('/');
   await page.evaluate(oldBoard=>{
     const key='bad-imnau-jeopardy-v1';const g=JSON.parse(localStorage.getItem(key)!);
     g.boards[1]=oldBoard;g.boards[0].categories[2].questions[0].text='Meine eigene Sportfrage';
     g.teams[0].score=1200;g.played=['0-2-0','1-0-0'];g.board=1;g.active='1-0-0';localStorage.setItem(key,JSON.stringify(g));
-  },previousBoardTwo);
+  },incorrectBoardTwo);
   await page.reload();
   await expect(page.locator('.question-view')).toHaveCount(0);
   await expect(page.locator('.score').first()).toHaveText('1.200');
   await page.getByRole('button',{name:'Schätz mal!, 100 Punkte',exact:true}).click();
-  await expect(page.locator('.question-view h2')).toContainText('DIN-A4');
+  await expect(page.locator('.question-view h2')).toContainText('Klavier');
   await page.getByRole('button',{name:'Antwort anzeigen',exact:true}).click();
-  await expect(page.locator('.answer')).toContainText('29,7');
+  await expect(page.locator('.answer')).toContainText('88');
   const saved=await page.evaluate(()=>JSON.parse(localStorage.getItem('bad-imnau-jeopardy-v1')!));
   expect(saved.boards[0].categories[2].questions[0].text).toBe('Meine eigene Sportfrage');
   expect(saved.played).toEqual(['0-2-0']);
