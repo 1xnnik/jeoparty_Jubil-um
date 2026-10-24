@@ -1,5 +1,11 @@
 # Songrunde
 
-Fünf eigene MP3-Dateien als song-1.mp3 bis song-5.mp3 hier ablegen. Im Editor die jeweilige Antwort (Titel und Interpret) ergänzen. Die Dateien werden erst nach Klick auf Play wiedergegeben, ohne Autoplay. Alle fünf Punktefelder sind MP3-Fragen.
+- song-1.mp3 — 100 Punkte: LMFAO feat. Lauren Bennett & GoonRock — Party Rock Anthem
+- song-2.mp3 — 200 Punkte: Queen — I Want to Break Free
+- song-3.mp3 — 300 Punkte: Michael Jackson — They Don’t Care About Us
+- song-4.mp3 — 400 Punkte: ABBA — Lay All Your Love on Me
+- song-5.mp3 — 500 Punkte: Journey — Don’t Stop Believin’ (**Datei fehlt noch**)
 
-Alternativ MP3s im Editor direkt einbetten (max. 2 MB je Datei, gemeinsames Browser-Speicherlimit beachten). Größere Dateien immer hier ablegen. Keine MP3-Dateien wurden mitgeliefert.
+Die ersten vier gelieferten Dateien enthielten WebM-Audio trotz MP3-Endung. Sie wurden mit FFmpeg in echte MP3s umgewandelt. Die gelieferte Journey-Datei war nur ein Byte groß und konnte nicht verwendet werden; bitte eine vollständige Datei als song-5.mp3 ergänzen. Alle Titel und Interpreten sind bereits als Antworten eingetragen.
+
+Wiedergabe nur nach manuellem Play, ohne Autoplay. Die vollständigen lokalen Dateien liegen hier, damit sie nicht das LocalStorage-Limit belasten. Bitte keine großen Songs im Editor einbetten.
