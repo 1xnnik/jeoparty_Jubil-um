@@ -71,6 +71,9 @@ export function migrateStandardBoards(game: Game): Game | null {
   const boards = game.boards.map((board) => ({
     ...board,
     categories: board.categories.map((category) => {
+      if (category.name === "Wahr oder Quatsch?") {
+        category = {...category,name:"Wahr oder Falsch?",questions:category.questions.map(q=>({...q,text:q.text.replace(/\bQuatsch\b/g,"Falsch"),answer:q.answer.replace(/\bQuatsch\b/g,"Falsch")}))};
+      }
       const oldMarathonText = "Wie schnell wurde die Marathondistanz beim Sub-2-Stunden-Lauf von Eliud Kipchoge 2019 in Wien bewältigt?";
       if (category.questions.some(q => q.id === "0-2-4" && q.text === oldMarathonText)) {
         const updatedQuestion = targets.flatMap(c => c.questions).find(q => q.id === "0-2-4")!;

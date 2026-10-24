@@ -39,40 +39,40 @@ export const defaultBoards: Board[] = [
         ],
       },
       {
-        name: "Wahr oder Quatsch?",
+        name: "Wahr oder Falsch?",
         questions: [
           {
             id: "1-1-0",
             value: 100,
-            text: "Wahr oder Quatsch: Fledermäuse sind blind.",
+            text: "Wahr oder Falsch: Fledermäuse sind blind.",
             answer:
-              "Quatsch. Fledermäuse können sehen; viele nutzen zusätzlich Echoortung.",
+              "Falsch. Fledermäuse können sehen; viele nutzen zusätzlich Echoortung.",
           },
           {
             id: "1-1-1",
             value: 200,
-            text: "Wahr oder Quatsch: Eine Erdbeere ist botanisch eine Nuss-Sammelfrucht.",
+            text: "Wahr oder Falsch: Eine Erdbeere ist botanisch eine Nuss-Sammelfrucht.",
             answer:
               "Wahr. Die kleinen Körnchen auf der Oberfläche sind die eigentlichen Nüsschen.",
           },
           {
             id: "1-1-2",
             value: 300,
-            text: "Wahr oder Quatsch: Ein Blitz kann an derselben Stelle nur einmal einschlagen.",
+            text: "Wahr oder Falsch: Ein Blitz kann an derselben Stelle nur einmal einschlagen.",
             answer:
-              "Quatsch. Blitze können mehrfach an derselben Stelle einschlagen.",
+              "Falsch. Blitze können mehrfach an derselben Stelle einschlagen.",
           },
           {
             id: "1-1-3",
             value: 400,
-            text: "Wahr oder Quatsch: Auf der Venus dauert eine Drehung um die eigene Achse länger als ein Umlauf um die Sonne.",
+            text: "Wahr oder Falsch: Auf der Venus dauert eine Drehung um die eigene Achse länger als ein Umlauf um die Sonne.",
             answer:
               "Wahr. Etwa 243 Erdtage Rotation gegenüber etwa 225 Erdtagen Umlauf.",
           },
           {
             id: "1-1-4",
             value: 500,
-            text: "Wahr oder Quatsch: Haie existierten schon vor den ersten Bäumen.",
+            text: "Wahr oder Falsch: Haie existierten schon vor den ersten Bäumen.",
             answer:
               "Wahr. Haie gibt es seit über 400 Millionen Jahren, Bäume erst seit etwa 385 Millionen Jahren.",
           },

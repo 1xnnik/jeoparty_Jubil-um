@@ -69,7 +69,7 @@ Die Browserprüfungen verwenden Chromium unter `/usr/bin/chromium`. Auf anderen 
 
 ## Neues Jubiläums-Fragenset
 
-Board 1: **Schätz mal!**, **Wahr oder Quatsch?**, **Damals & heute**, **Filmreif**, **Kurios, aber wahr**.
+Board 1: **Schätz mal!**, **Wahr oder Falsch?**, **Damals & heute**, **Filmreif**, **Kurios, aber wahr**.
 Board 2: **Wer ist das?**, **Was ist das für ein Song?**, **Sport, aber wild**, **Jugendhaus-Geschichte**, **Was passiert in Imnau?**.
 
 Unveränderte ursprüngliche Standardfragen im Browser werden automatisch auf die neuen Musik-, Bild- und Jugendhaus-Fragen aktualisiert. Zuerst wird der alte Stand lokal gesichert; Teamnamen und Punkte bleiben erhalten. Bei eigenen oder anderen älteren Fragen erscheint direkt über dem Spielfeld der Hinweis **Neue Kategorien sind verfügbar** mit dem Button **Musik-, Bild- und Jugendhaus-Fragen laden**. Die Aktualisierung benötigt dann eine Bestätigung und sichert die bisherigen Fragen. Auch im Editor steht **Neue Jubiläumsfragen laden** zur Verfügung. Dort kann die lokale Sicherung anschließend über **Vorherige Fragen exportieren** heruntergeladen werden. Ist der Browser-Speicher voll, wird nichts ersetzt. Gespielte Felder werden bei Aktualisierung zurückgesetzt. Neue Browser starten direkt mit dem neuen Set.
