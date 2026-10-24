@@ -1,3 +1,4 @@
+import { previousBoardTwo } from "./previousBoardTwo";
 import type { Board, Game } from "./data";
 import { defaultBoards } from "./questions";
 import { legacyBoards } from "./legacyQuestions";
@@ -50,4 +51,12 @@ export function updatedGame(game: Game): Game {
     active: null,
     played: [],
   };
+}
+
+export function hasPreviousBoardTwo(boards: Board[]) {
+  return normalized([boards[1]]) === normalized([previousBoardTwo]);
+}
+export function refreshBoardTwo(game: Game): Game {
+  const oldIds = new Set(game.boards[1].categories.flatMap(c => c.questions.map(q => q.id)));
+  return {...game,boards:[game.boards[0],structuredClone(defaultBoards[1])],played:game.played.filter(id => !oldIds.has(id)),active:game.active && oldIds.has(game.active) ? null : game.active};
 }

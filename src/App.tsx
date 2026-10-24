@@ -14,6 +14,8 @@ import {
   isOriginalQuestionSet,
   needsQuestionUpdate,
   updatedGame,
+  hasPreviousBoardTwo,
+  refreshBoardTwo,
 } from "./questionUpdates";
 function load(): Game {
   try {
@@ -56,6 +58,10 @@ function load(): Game {
         } catch {
           /* Keep the existing game when backup storage is unavailable. */
         }
+      }
+      if (hasPreviousBoardTwo(g.boards)) {
+        try { localStorage.setItem(BACKUP_KEY, s); return refreshBoardTwo({...freshGame(),...g,logo: !g.logo || g.logo === "/logo.svg" ? freshGame().logo : g.logo}); }
+        catch { /* Preserve the old board if its backup cannot be saved. */ }
       }
       return {
         ...freshGame(),
