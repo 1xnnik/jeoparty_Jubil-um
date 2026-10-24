@@ -482,8 +482,8 @@ export default function App() {
             </div>
             <p>
               Vor der Veranstaltung alle Fragen und Medien prüfen. Bei der
-              Mitgliederfrage bitte den Bezugszeitpunkt ergänzen; bei den Songs
-              fehlt noch die abspielbare Journey-Datei (Song 5).
+              Mitgliederfrage bitte den Bezugszeitpunkt ergänzen. Alle fünf Songs
+              sind lokal eingebunden.
             </p>
             <div className="editor-selects">
               <label>

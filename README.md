@@ -82,7 +82,7 @@ Jedes Bild startet nach dem Laden stark verschwommen und wird automatisch über 
 
 ### Fünf MP3-Fragen
 
-Vier Songs sind als echte MP3s unter `public/media/songs/song-1.mp3` bis `song-4.mp3` eingebunden (LMFAO, Queen, Michael Jackson, ABBA). Titel und Interpreten aller fünf Fragen sind eingetragen. Die Journey-Datei für `song-5.mp3` fehlt noch: Der gelieferte Upload enthielt nur ein Byte und kein abspielbares Audio. Eine vollständige Datei muss ergänzt werden. Es werden keine Songs aus dem Internet geladen. Alle fünf Punktefelder verwenden eine MP3-Datei. MP3-Fragen besitzen einen lokalen Player mit Play, Pause und Seek; kein Autoplay. Auch Audio-Pfade und eingebettete Audiodateien bleiben im JSON-Export erhalten. Medien unter public/media müssen separat mitgegeben werden.
+Alle fünf Songs sind als echte MP3s unter `public/media/songs/song-1.mp3` bis `song-5.mp3` eingebunden: LMFAO, Queen, Michael Jackson, ABBA und Journey. Titel und Interpreten aller fünf Fragen sind eingetragen. Es werden keine Songs aus dem Internet geladen. Alle fünf Punktefelder verwenden eine MP3-Datei. MP3-Fragen besitzen einen lokalen Player mit Play, Pause und Seek; kein Autoplay. Auch Audio-Pfade und eingebettete Audiodateien bleiben im JSON-Export erhalten. Medien unter public/media müssen separat mitgegeben werden.
 
 ### Wann war das?
 
