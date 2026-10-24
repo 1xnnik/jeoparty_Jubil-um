@@ -29,7 +29,7 @@ Nach der Installation benötigt das laufende Spiel keine Internetverbindung. All
 ## Veranstaltung vorbereiten
 
 1. Unter **Teams** zwei bis sechs Teamnamen einstellen.
-2. Im **Frageneditor** alle Fragen prüfen. Vereinsfragen sind ausdrücklich Vorlagen und müssen mit echten Vereinsgeschichten ergänzt werden.
+2. Im **Frageneditor** alle Fragen prüfen. Die Jugendhaus-Antworten stammen aus euren Angaben; bei der Mitgliederfrage vor dem Spiel den Bezugszeitpunkt ergänzen.
 3. Das Original-Logo aus `media/logo.png` ist fest eingebunden und funktioniert auch offline. Bereits gespeicherte Spiele mit dem alten Platzhalter übernehmen es automatisch. Ein optionaler Logo-Upload im Editor überschreibt das Standardlogo nur im aktuellen Browser. Logos bleiben unverzerrt und auf allen Ansichten sichtbar.
 4. Fragen als JSON exportieren und separat sichern. JSON enthält beide Boards und eingebettete Medien, aber keine Teams, Punkte oder Logo.
 5. Ein komplettes Testspiel auf dem Veranstaltungsgerät durchführen und Beamer prüfen.
@@ -80,10 +80,10 @@ Bereits gespeicherte Fragen werden nicht überschrieben. Im Frageneditor zuerst 
 
 Jedes Bild startet nach dem Laden stark verschwommen und wird automatisch über 60 Sekunden scharf. Der Moderator kann die Enthüllung pausieren, fortsetzen oder zurücksetzen. Nach dem Zurücksetzen beginnt die Enthüllung erst beim erneuten Start. **Antwort anzeigen** zeigt die Person sofort scharf und blendet den Namen ein; Punkte bleiben ausschließlich manuell. Im Editor sind Bildenthüllung und Dauer (5–180 Sekunden) je Frage einstellbar. Beim Schließen oder Neuladen beginnt das Bild wieder verschwommen.
 
-### Vier MP3s und Musik-Bonus
+### Fünf MP3-Fragen
 
-Vier MP3s unter `public/media/songs/song-1.mp3` bis `song-4.mp3` ablegen und im Editor die echten Titel/Interpreten als Antworten eintragen. Die MP3s fehlen noch; es werden keine Songs aus dem Internet geladen. Das 500-Punkte-Feld ist ein Musik-Bonus ohne Audiodatei. MP3-Fragen besitzen einen lokalen Player mit Play, Pause und Seek; kein Autoplay. Auch Audio-Pfade und eingebettete Audiodateien bleiben im JSON-Export erhalten. Medien unter public/media müssen separat mitgegeben werden.
+Fünf MP3s unter `public/media/songs/song-1.mp3` bis `song-5.mp3` ablegen und im Editor die echten Titel/Interpreten als Antworten eintragen. Die MP3s fehlen noch; es werden keine Songs aus dem Internet geladen. Alle fünf Punktefelder verwenden eine MP3-Datei. MP3-Fragen besitzen einen lokalen Player mit Play, Pause und Seek; kein Autoplay. Auch Audio-Pfade und eingebettete Audiodateien bleiben im JSON-Export erhalten. Medien unter public/media müssen separat mitgegeben werden.
 
 ### Wann war das?
 
-Die fünf Fragen zur Jugendhaus-Geschichte sind offene Vorlagen für Gründung, Party, Renovierung, Ausflug und ein historisches Foto. Konkrete Ereignisse und richtige Jahreszahlen müssen vor dem Einsatz ergänzt werden. Das Spiel erfindet keine Vereinsgeschichte.
+Die fünf Jugendhaus-Fragen verwenden eure Angaben: 131 Mitglieder (Bezugszeitpunkt noch im Editor ergänzen), Renovierung 2015, Besucherrekord bei der Karibischen Nacht 2022 mit rund 900 Gästen, 20. Karibische Nacht im Jahr 2022 sowie Sonja Schramm als Vorstand 2007.

@@ -325,7 +325,7 @@ test("new question set preserves saved edits until confirmed and exports media s
   expect(data.boards[0].categories[0].questions[0].revealSeconds).toBe(60);
   expect(
     data.boards[0].categories[1].questions.filter((q: any) => q.audio),
-  ).toHaveLength(4);
+  ).toHaveLength(5);
   page.once("dialog", (d) => d.accept());
   await page
     .locator('input[type=file][accept="application/json,.json"]')

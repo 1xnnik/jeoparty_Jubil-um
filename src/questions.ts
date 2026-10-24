@@ -88,8 +88,9 @@ export const defaultBoards: Board[] = [
           {
             id: "0-1-4",
             value: 500,
-            text: "Musik-Bonus: Welche Band besang 1982 den „Sternenhimmel“?",
-            answer: "Hubert Kah",
+            text: "Welcher Song läuft hier? Nennt Titel und Interpret.",
+            answer: "OFFEN: Titel und Interpret von Song 5 eintragen.",
+            audio: "/media/songs/song-5.mp3",
           },
         ],
       },
@@ -135,37 +136,32 @@ export const defaultBoards: Board[] = [
           {
             id: "0-3-0",
             value: 100,
-            text: "VORLAGE · Wann wurde das Jugendhaus gegründet?",
-            answer:
-              "OFFEN: Gründungsjahr anhand eurer Vereinsunterlagen eintragen.",
+            text: "Wie viele Mitglieder hat das Jugendhaus? (Stand: bitte vor dem Spiel ergänzen.)",
+            answer: "131 Mitglieder",
           },
           {
             id: "0-3-1",
             value: 200,
-            text: "VORLAGE · Wann war diese legendäre Jugendhaus-Party?",
-            answer:
-              "OFFEN: Konkrete Party und richtiges Jahr ergänzen; optional Foto hinzufügen.",
+            text: "In welchem Jahr wurde das Jugendhaus renoviert?",
+            answer: "2015",
           },
           {
             id: "0-3-2",
             value: 300,
-            text: "VORLAGE · Wann fand diese Renovierung statt?",
-            answer:
-              "OFFEN: Renovierung und richtiges Jahr ergänzen; optional Foto hinzufügen.",
+            text: "In welchem Jahr gab es bei der Karibischen Nacht mit rund 900 Gästen einen Besucherrekord?",
+            answer: "2022",
           },
           {
             id: "0-3-3",
             value: 400,
-            text: "VORLAGE · Wann war dieser gemeinsame Ausflug?",
-            answer:
-              "OFFEN: Ausflug und richtiges Jahr ergänzen; optional Foto hinzufügen.",
+            text: "Die wievielte Karibische Nacht fand 2022 statt?",
+            answer: "Die 20. Karibische Nacht",
           },
           {
             id: "0-3-4",
             value: 500,
-            text: "VORLAGE · Wann wurde dieses Jugendhaus-Foto aufgenommen?",
-            answer:
-              "OFFEN: Historisches Foto hinzufügen und richtiges Jahr eintragen.",
+            text: "Wer war 2007 Vorstand des Jugendhauses?",
+            answer: "Sonja Schramm",
           },
         ],
       },

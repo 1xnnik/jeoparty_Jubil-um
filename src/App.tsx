@@ -481,8 +481,9 @@ export default function App() {
               </div>
             </div>
             <p>
-              Die Vereinsfragen sind Vorlagen. Bitte vor der Veranstaltung mit
-              euren eigenen Geschichten und geprüften Antworten ergänzen.
+              Vor der Veranstaltung alle Fragen und Medien prüfen. Bei der
+              Mitgliederfrage bitte den Bezugszeitpunkt ergänzen; die MP3-Antworten
+              benötigen noch Titel und Interpret.
             </p>
             <div className="editor-selects">
               <label>
