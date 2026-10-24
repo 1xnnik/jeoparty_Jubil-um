@@ -8,7 +8,13 @@ import {
 } from "./data";
 import { QuestionMedia } from "./QuestionMedia";
 import { Scoreboard } from "./Scoreboard";
-const KEY = "bad-imnau-jeopardy-v1";
+import {
+  SAVE_KEY as KEY,
+  BACKUP_KEY,
+  isOriginalQuestionSet,
+  needsQuestionUpdate,
+  updatedGame,
+} from "./questionUpdates";
 function load(): Game {
   try {
     const s = localStorage.getItem(KEY);
@@ -31,6 +37,19 @@ function load(): Game {
         ![0, 1].includes(g.board)
       )
         throw Error();
+      if (isOriginalQuestionSet(g.boards)) {
+        try {
+          // Do not migrate unless a recoverable copy has been saved first.
+          localStorage.setItem(BACKUP_KEY, s);
+          return updatedGame({
+            ...freshGame(),
+            ...g,
+            logo: !g.logo || g.logo === "/logo.svg" ? freshGame().logo : g.logo,
+          });
+        } catch {
+          /* Keep the existing game when backup storage is unavailable. */
+        }
+      }
       return {
         ...freshGame(),
         ...g,
@@ -50,7 +69,14 @@ export default function App() {
     [editBoard, setEditBoard] = useState(0),
     [editCategory, setEditCategory] = useState(0),
     [editQuestion, setEditQuestion] = useState(0),
-    [storageError, setStorageError] = useState(false);
+    [storageError, setStorageError] = useState(false),
+    [backupAvailable, setBackupAvailable] = useState(() => {
+      try {
+        return !!localStorage.getItem(BACKUP_KEY);
+      } catch {
+        return false;
+      }
+    });
   const importRef = useRef<HTMLInputElement>(null);
   const active = game.boards
     .flatMap((b) => b.categories.flatMap((c) => c.questions))
@@ -133,6 +159,43 @@ export default function App() {
     const a = document.createElement("a");
     a.href = url;
     a.download = "jugendhaus-fragen.json";
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+  function loadLatestQuestions() {
+    if (
+      !confirm(
+        "Aktuelle Jubiläumsfragen laden? Eigene Fragen werden ersetzt und vorher lokal gesichert. Teamnamen und Punkte bleiben erhalten; gespielte Felder werden zurückgesetzt.",
+      )
+    )
+      return;
+    try {
+      localStorage.setItem(BACKUP_KEY, JSON.stringify(game));
+    } catch {
+      setNotice(
+        "Sicherung fehlgeschlagen. Bitte eigene Fragen zuerst als JSON exportieren und Browserspeicher freigeben. Es wurde nichts ersetzt.",
+      );
+      return;
+    }
+    setBackupAvailable(true);
+    setGame(updatedGame(game));
+    setAnswer(false);
+    setNotice(
+      "Musik-, Bild- und Jugendhaus-Fragen geladen. Team-Punkte bleiben erhalten.",
+    );
+  }
+  function exportPreviousQuestions() {
+    const saved = localStorage.getItem(BACKUP_KEY);
+    if (!saved) return;
+    const url = URL.createObjectURL(
+      new Blob(
+        [JSON.stringify({ boards: JSON.parse(saved).boards }, null, 2)],
+        { type: "application/json" },
+      ),
+    );
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "fragen-vor-aktualisierung.json";
     a.click();
     URL.revokeObjectURL(url);
   }
@@ -253,6 +316,25 @@ export default function App() {
           <button onClick={reset}>Neues Spiel</button>
         </div>
       </nav>
+      {needsQuestionUpdate(game.boards) && (
+        <div
+          className="question-update"
+          role="region"
+          aria-label="Neue Fragen verfügbar"
+        >
+          <div>
+            <strong>Neue Kategorien sind verfügbar</strong>
+            <p>
+              Fünf MP3-Songs, Personen mit Bildenthüllung und eure
+              Jugendhaus-Fragen. Hier sind noch ältere oder eigene Fragen
+              gespeichert.
+            </p>
+          </div>
+          <button className="gold" onClick={loadLatestQuestions}>
+            Musik-, Bild- und Jugendhaus-Fragen laden
+          </button>
+        </div>
+      )}
       {storageError && (
         <div className="warning" role="alert">
           Speichern fehlgeschlagen: Browserspeicher voll oder nicht verfügbar.
@@ -448,26 +530,14 @@ export default function App() {
               </div>
               <div>
                 <button onClick={exportJSON}>JSON exportieren</button>
-                <button
-                  onClick={() => {
-                    if (
-                      confirm(
-                        "Neue Jubiläumsfragen laden? Eigene Fragen werden ersetzt. Bitte vorher als JSON exportieren. Punkte bleiben erhalten, gespielte Felder werden zurückgesetzt.",
-                      )
-                    ) {
-                      setGame((g) => ({
-                        ...g,
-                        boards: freshGame().boards,
-                        played: [],
-                        active: null,
-                      }));
-                      setAnswer(false);
-                      setNotice("Neues Jubiläums-Fragenset geladen.");
-                    }
-                  }}
-                >
+                <button onClick={loadLatestQuestions}>
                   Neue Jubiläumsfragen laden
                 </button>
+                {backupAvailable && (
+                  <button onClick={exportPreviousQuestions}>
+                    Vorherige Fragen exportieren
+                  </button>
+                )}
                 <button onClick={() => importRef.current?.click()}>
                   JSON importieren
                 </button>
@@ -482,8 +552,8 @@ export default function App() {
             </div>
             <p>
               Vor der Veranstaltung alle Fragen und Medien prüfen. Bei der
-              Mitgliederfrage bitte den Bezugszeitpunkt ergänzen. Alle fünf Songs
-              sind lokal eingebunden.
+              Mitgliederfrage bitte den Bezugszeitpunkt ergänzen. Alle fünf
+              Songs sind lokal eingebunden.
             </p>
             <div className="editor-selects">
               <label>

@@ -167,16 +167,14 @@ test("question export/import round trip and persistent local logo", async ({
       buffer: Buffer.from(JSON.stringify(data)),
     });
   await expect(page.getByRole("status")).toContainText("50 Fragen importiert");
-  await page
-    .getByLabel("Originales Jugendhaus-Logo hochladen")
-    .setInputFiles({
-      name: "logo.png",
-      mimeType: "image/png",
-      buffer: Buffer.from(
-        data.boards[0].categories[0].questions[0].image.split(",")[1],
-        "base64",
-      ),
-    });
+  await page.getByLabel("Originales Jugendhaus-Logo hochladen").setInputFiles({
+    name: "logo.png",
+    mimeType: "image/png",
+    buffer: Buffer.from(
+      data.boards[0].categories[0].questions[0].image.split(",")[1],
+      "base64",
+    ),
+  });
   await expect(page.locator(".logo")).toHaveAttribute(
     "src",
     /^data:image\/png;base64,/,
@@ -348,4 +346,107 @@ test("new question set preserves saved edits until confirmed and exports media s
       buffer: Buffer.from(JSON.stringify(data)),
     });
   await expect(page.getByRole("status")).toContainText("Import fehlgeschlagen");
+});
+
+test("legacy default save automatically gets music, reveal and history without losing points", async ({
+  page,
+}) => {
+  const { legacyBoards } = await import("../src/legacyQuestions");
+  await page.addInitScript((boards) => {
+    localStorage.setItem(
+      "bad-imnau-jeopardy-v1",
+      JSON.stringify({
+        boards,
+        teams: [
+          { id: "a", name: "ALTE TEAMS", score: 700 },
+          { id: "b", name: "GAST", score: -200 },
+        ],
+        board: 1,
+        played: ["0-0-0"],
+        active: null,
+        step: 200,
+        history: [],
+        logo: "/logo.svg",
+      }),
+    );
+  }, legacyBoards);
+  await page.goto("/");
+  await expect(page.locator(".category h3").nth(1)).toHaveText(
+    "Was ist das für ein Song?",
+  );
+  await expect(page.locator(".score").first()).toHaveText("700");
+  await page
+    .getByRole("button", {
+      name: "Was ist das für ein Song?, 500 Punkte",
+      exact: true,
+    })
+    .click();
+  await expect(page.locator("audio")).toHaveAttribute(
+    "src",
+    "/media/songs/song-5.mp3",
+  );
+  await page.getByRole("button", { name: "Zum Board ✓" }).click();
+  await page
+    .getByRole("button", {
+      name: "Jugendhaus-Geschichte, 200 Punkte",
+      exact: true,
+    })
+    .click();
+  await page
+    .getByRole("button", { name: "Antwort anzeigen", exact: true })
+    .click();
+  await expect(page.locator(".answer")).toContainText("2015");
+  expect(
+    await page.evaluate(
+      () =>
+        !!localStorage.getItem("bad-imnau-jeopardy-v1-before-question-update"),
+    ),
+  ).toBeTruthy();
+});
+
+test("custom old save offers a visible update and backs up edits before replacement", async ({
+  page,
+}) => {
+  const { legacyBoards } = await import("../src/legacyQuestions");
+  const boards = structuredClone(legacyBoards);
+  boards[0].categories[0].questions[0].text = "Meine eigene Frage";
+  await page.addInitScript((boards) => {
+    localStorage.setItem(
+      "bad-imnau-jeopardy-v1",
+      JSON.stringify({
+        boards,
+        teams: [
+          { id: "a", name: "MEIN TEAM", score: 900 },
+          { id: "b", name: "ZWEITES TEAM", score: 0 },
+        ],
+        board: 0,
+        played: [],
+        active: null,
+        step: 100,
+        history: [],
+        logo: "/logo.svg",
+      }),
+    );
+  }, boards);
+  await page.goto("/");
+  await expect(
+    page.getByRole("region", { name: "Neue Fragen verfügbar" }),
+  ).toBeVisible();
+  page.once("dialog", (d) => d.accept());
+  await page
+    .getByRole("button", {
+      name: "Musik-, Bild- und Jugendhaus-Fragen laden",
+      exact: true,
+    })
+    .click();
+  await expect(page.locator(".category h3").first()).toHaveText("Wer ist das?");
+  await expect(page.locator(".score").first()).toHaveText("900");
+  expect(
+    await page.evaluate(
+      () =>
+        JSON.parse(
+          localStorage.getItem("bad-imnau-jeopardy-v1-before-question-update")!,
+        ).boards[0].categories[0].questions[0].text,
+    ),
+  ).toBe("Meine eigene Frage");
 });
