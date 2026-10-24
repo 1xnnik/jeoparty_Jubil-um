@@ -810,7 +810,113 @@ main {
   flex-shrink: 0;
 }
 
-@media (min-width: 901px) { .play-main { display:flex; flex-direction:column; overflow:hidden; } .play-main .board-heading,.play-main .board-footer { flex-shrink:0; } .play-main .board { flex:1; min-height:0; } .play-main .category { min-height:0; grid-template-rows: minmax(38px, .8fr) repeat(5,minmax(0,1fr)); } .play-main .tile { font-size:clamp(24px,3.5vh,42px); } .play-main .board-footer { margin-bottom:5px; } }
+@media (min-width: 901px) {
+  .play-main {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+  .play-main .board-heading,
+  .play-main .board-footer {
+    flex-shrink: 0;
+  }
+  .play-main .board {
+    flex: 1;
+    min-height: 0;
+  }
+  .play-main .category {
+    min-height: 0;
+    grid-template-rows: minmax(38px, 0.8fr) repeat(5, minmax(0, 1fr));
+  }
+  .play-main .tile {
+    font-size: clamp(24px, 3.5vh, 42px);
+  }
+  .play-main .board-footer {
+    margin-bottom: 5px;
+  }
+}
 
-.bottom-line { justify-content: flex-end; }
-.board-heading > div > .eyebrow { text-transform: none; }
+.bottom-line {
+  justify-content: flex-end;
+}
+.board-heading > div > .eyebrow {
+  text-transform: none;
+}
+
+.reveal-frame {
+  margin: 20px auto;
+  max-width: 660px;
+  height: clamp(200px, 34vh, 390px);
+  overflow: hidden;
+  border-radius: 8px;
+  background: #07132a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.reveal-frame .question-image {
+  margin: 0;
+  max-height: 100%;
+  max-width: 100%;
+  object-fit: contain;
+  will-change: filter;
+}
+.reveal-controls {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin: 12px 0;
+}
+.song-player {
+  max-width: 600px;
+  margin: 30px auto;
+  padding: 24px;
+  background: #08152e88;
+  border: 1px solid #daba7355;
+  border-radius: 10px;
+}
+.song-player > span {
+  display: block;
+  font-size: 11px;
+  color: #daba73;
+  letter-spacing: 2px;
+  margin-bottom: 18px;
+}
+.song-player audio {
+  width: 100%;
+}
+.media-warning {
+  color: #f0ca82;
+  font-size: 14px;
+  line-height: 1.5;
+  padding: 12px;
+}
+.reveal-option input {
+  align-self: flex-start;
+  accent-color: #daba73;
+  width: 20px;
+  height: 20px;
+}
+.question-view:has(.reveal-frame) h2 {
+  margin: 18px auto;
+  font-size: clamp(24px, 2.5vw, 38px);
+}
+@media (max-width: 600px) {
+  .editor-heading > div:last-child {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+  }
+  .reveal-controls {
+    flex-wrap: wrap;
+  }
+  .reveal-controls button {
+    font-size: 12px;
+  }
+  .reveal-frame {
+    height: 250px;
+  }
+  .song-player {
+    padding: 14px;
+  }
+}

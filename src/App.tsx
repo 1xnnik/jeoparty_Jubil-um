@@ -6,6 +6,7 @@ import {
   type Game,
   type Question,
 } from "./data";
+import { QuestionMedia } from "./QuestionMedia";
 import { Scoreboard } from "./Scoreboard";
 const KEY = "bad-imnau-jeopardy-v1";
 function load(): Game {
@@ -30,7 +31,11 @@ function load(): Game {
         ![0, 1].includes(g.board)
       )
         throw Error();
-      return { ...freshGame(), ...g, logo: !g.logo || g.logo === "/logo.svg" ? freshGame().logo : g.logo };
+      return {
+        ...freshGame(),
+        ...g,
+        logo: !g.logo || g.logo === "/logo.svg" ? freshGame().logo : g.logo,
+      };
     }
   } catch {
     /* Invalid saved state falls back to a fresh game. */
@@ -174,10 +179,14 @@ export default function App() {
   }
   async function media(
     file: File | undefined,
-    type: "image" | "video" | "logo",
+    type: "image" | "video" | "audio" | "logo",
   ) {
     if (!file) return;
-    if (!file.type.startsWith(type === "video" ? "video/" : "image/")) {
+    if (
+      !file.type.startsWith(
+        type === "video" ? "video/" : type === "audio" ? "audio/" : "image/",
+      )
+    ) {
       setNotice("Bitte eine passende Mediendatei auswählen.");
       return;
     }
@@ -206,7 +215,6 @@ export default function App() {
           <button onClick={() => void fullscreen()} title="Vollbildmodus">
             ⛶ <span>Vollbild</span>
           </button>
-
         </div>
         <h1>40 JAHRE JUGENDHAUS BAD IMNAU</h1>
       </header>
@@ -303,23 +311,11 @@ export default function App() {
                   <strong>{active.value} PUNKTE</strong>
                 </div>
                 <h2>{active.text}</h2>
-                {active.image && (
-                  <img
-                    className="question-image"
-                    src={active.image}
-                    alt="Bild zur Frage"
-                  />
-                )}
-                {active.video && (
-                  <video
-                    key={active.video}
-                    muted
-                    onVolumeChange={(e) => { e.currentTarget.muted = true; }}
-                    controls
-                    src={active.video}
-                    preload="metadata"
-                  />
-                )}
+                <QuestionMedia
+                  key={`${active.id}-${active.image}-${active.audio}`}
+                  question={active}
+                  showAnswer={answer}
+                />
                 {answer && (
                   <div className="answer">
                     <small>DIE ANTWORT</small>
@@ -452,6 +448,26 @@ export default function App() {
               </div>
               <div>
                 <button onClick={exportJSON}>JSON exportieren</button>
+                <button
+                  onClick={() => {
+                    if (
+                      confirm(
+                        "Neue Jubiläumsfragen laden? Eigene Fragen werden ersetzt. Bitte vorher als JSON exportieren. Punkte bleiben erhalten, gespielte Felder werden zurückgesetzt.",
+                      )
+                    ) {
+                      setGame((g) => ({
+                        ...g,
+                        boards: freshGame().boards,
+                        played: [],
+                        active: null,
+                      }));
+                      setAnswer(false);
+                      setNotice("Neues Jubiläums-Fragenset geladen.");
+                    }
+                  }}
+                >
+                  Neue Jubiläumsfragen laden
+                </button>
                 <button onClick={() => importRef.current?.click()}>
                   JSON importieren
                 </button>
@@ -568,10 +584,42 @@ export default function App() {
                   onChange={(e) => editQ({ answer: e.target.value })}
                 />
               </label>
-              {(["image", "video"] as const).map((type) => (
+              <label className="reveal-option">
+                Bild langsam enthüllen
+                <input
+                  type="checkbox"
+                  checked={selected.reveal ?? false}
+                  onChange={(e) => editQ({ reveal: e.target.checked })}
+                />
+              </label>
+              {selected.reveal && (
+                <label>
+                  Enthüllungsdauer in Sekunden
+                  <input
+                    type="number"
+                    min="5"
+                    max="180"
+                    value={selected.revealSeconds ?? 60}
+                    onChange={(e) =>
+                      editQ({
+                        revealSeconds: Math.max(
+                          5,
+                          Math.min(180, Number(e.target.value)),
+                        ),
+                      })
+                    }
+                  />
+                </label>
+              )}
+              {(["image", "video", "audio"] as const).map((type) => (
                 <div key={type}>
                   <label>
-                    {type === "image" ? "Bild" : "Video"} lokal hinzufügen
+                    {type === "image"
+                      ? "Bild"
+                      : type === "audio"
+                        ? "MP3 / Audio"
+                        : "Video"}{" "}
+                    lokal hinzufügen
                     <input
                       type="file"
                       accept={`${type}/*`}
@@ -581,7 +629,7 @@ export default function App() {
                   <label>
                     Oder lokaler Pfad (public/media)
                     <input
-                      placeholder={`/media/${type === "image" ? "foto.jpg" : "film.mp4"}`}
+                      placeholder={`/media/${type === "image" ? "foto.jpg" : type === "audio" ? "song.mp3" : "film.mp4"}`}
                       defaultValue={
                         selected[type]?.startsWith("/media/")
                           ? selected[type]
@@ -615,8 +663,9 @@ export default function App() {
               </label>
               <p>
                 Das Logo wird lokal gespeichert und auf allen Ansichten
-                angezeigt. Standardmäßig ist das Jugendhaus-Logo aus media/logo.png
-                fest eingebunden. Ein Upload ersetzt es nur in diesem Browser.
+                angezeigt. Standardmäßig ist das Jugendhaus-Logo aus
+                media/logo.png fest eingebunden. Ein Upload ersetzt es nur in
+                diesem Browser.
               </p>
             </div>
           </section>

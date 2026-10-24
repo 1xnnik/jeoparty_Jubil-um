@@ -40,7 +40,7 @@ Nach der Installation benötigt das laufende Spiel keine Internetverbindung. All
 - **+ / −** ändern ausschließlich das gewählte Team um den aktiven Fragewert. Ohne aktive Frage gilt der ausgewählte Punkteschritt. Negative Punkte sind erlaubt.
 - **Zum Board** markiert die Frage als gespielt. Das Öffnen oder Anzeigen der Antwort vergibt keine Punkte.
 - Board 2 übernimmt alle Punktestände; ein vorzeitiger Wechsel fragt nach.
-- Die Anwendung hat keinen Timer und keinen Sound. Eingebettete Videos werden dauerhaft stumm wiedergegeben.
+- Es gibt keinen Countdown und keine Spielsounds. Nur MP3-Fragen spielen nach manuellem Play Musik ab; Videos bleiben stumm.
 - Spielstand wird nach Änderungen automatisch gespeichert. **Speichern** bestätigt das explizit, **Fortsetzen** lädt den letzten lokalen Stand. Beim Neuladen wird auch eine aktive Frage wieder geöffnet; die Antwortanzeige startet zurückgesetzt.
 - **Neues Spiel** setzt erst nach Bestätigung Punkte und gespielte Fragen zurück; Teams, Fragen und Logo bleiben erhalten.
 
@@ -66,3 +66,24 @@ npx playwright test
 ```
 
 Die Browserprüfungen verwenden Chromium unter `/usr/bin/chromium`. Auf anderen Geräten den Pfad in `playwright.config.ts` anpassen oder `executablePath` entfernen und `npx playwright install chromium` ausführen. Die Tests decken manuelle Punkte, Speicherung, Boardwechsel, Editor, Importfehler, Reset-Bestätigung, die reduzierte Oberfläche und mobiles Layout ab.
+
+## Neues Jubiläums-Fragenset
+
+Board 1: **Wer ist das?**, **Was ist das für ein Song?**, **Sport, aber wild**, **Jugendhaus-Geschichte**, **Kreuz & quer**.
+Board 2: **Schätz mal!**, **Wahr oder Quatsch?**, **Damals & heute**, **Filmreif**, **Kurios, aber wahr**.
+
+Bereits gespeicherte Fragen werden nicht überschrieben. Im Frageneditor zuerst JSON exportieren und anschließend **Neue Jubiläumsfragen laden** wählen. Eine Sicherheitsabfrage schützt eigene Fragen; Teamnamen und Punktestände bleiben erhalten, gespielte Felder werden zurückgesetzt. Neue Browser starten direkt mit dem neuen Set.
+
+### Personenrunde
+
+100 Punkte: Matthias Steiner, 200: Wolfgang Grupp, 300: Thomas Müller, 400: Wolfgang Petry, 500: Leon. Originalfotos unter `public/media/personen/` ergänzen (Dateinamen siehe dortige README) oder im Editor hochladen. Die Chatbilder waren nicht als Dateien verfügbar und sind daher noch nicht eingebunden. Fehlende Bilder werden im Spiel deutlich gemeldet.
+
+Jedes Bild startet nach dem Laden stark verschwommen und wird automatisch über 60 Sekunden scharf. Der Moderator kann die Enthüllung pausieren, fortsetzen oder zurücksetzen. Nach dem Zurücksetzen beginnt die Enthüllung erst beim erneuten Start. **Antwort anzeigen** zeigt die Person sofort scharf und blendet den Namen ein; Punkte bleiben ausschließlich manuell. Im Editor sind Bildenthüllung und Dauer (5–180 Sekunden) je Frage einstellbar. Beim Schließen oder Neuladen beginnt das Bild wieder verschwommen.
+
+### Vier MP3s und Musik-Bonus
+
+Vier MP3s unter `public/media/songs/song-1.mp3` bis `song-4.mp3` ablegen und im Editor die echten Titel/Interpreten als Antworten eintragen. Die MP3s fehlen noch; es werden keine Songs aus dem Internet geladen. Das 500-Punkte-Feld ist ein Musik-Bonus ohne Audiodatei. MP3-Fragen besitzen einen lokalen Player mit Play, Pause und Seek; kein Autoplay. Auch Audio-Pfade und eingebettete Audiodateien bleiben im JSON-Export erhalten. Medien unter public/media müssen separat mitgegeben werden.
+
+### Wann war das?
+
+Die fünf Fragen zur Jugendhaus-Geschichte sind offene Vorlagen für Gründung, Party, Renovierung, Ausflug und ein historisches Foto. Konkrete Ereignisse und richtige Jahreszahlen müssen vor dem Einsatz ergänzt werden. Das Spiel erfindet keine Vereinsgeschichte.
