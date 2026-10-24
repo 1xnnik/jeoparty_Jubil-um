@@ -206,7 +206,7 @@ test("person pictures reveal slowly, pause, restart and show the answer without 
   page.once("dialog", (d) => d.accept());
   await page.getByRole("button", { name: "Board 2", exact: true }).click();
   await page
-    .getByRole("button", { name: "Wer ist das?, 500 Punkte", exact: true })
+    .getByRole("button", { name: "Wer ist das?, 1000 Punkte", exact: true })
     .click();
   const picture = page.getByAltText("Gesuchte Person");
   await expect(picture).toBeVisible();
@@ -243,7 +243,7 @@ test("person pictures reveal slowly, pause, restart and show the answer without 
   await expect(page.locator(".score").first()).toHaveText("0");
   await page.getByRole("button", { name: "Zum Board ✓" }).click();
   await page
-    .getByRole("button", { name: "Wer ist das?, 100 Punkte", exact: true })
+    .getByRole("button", { name: "Wer ist das?, 200 Punkte", exact: true })
     .click();
   expect(await blur()).toBeGreaterThan(40);
 });
@@ -274,7 +274,7 @@ test("local audio plays only on request and stops on closing the question", asyn
   await page.getByRole("button", { name: "Board 2", exact: true }).click();
   await page
     .getByRole("button", {
-      name: "Was ist das für ein Song?, 100 Punkte",
+      name: "Was ist das für ein Song?, 200 Punkte",
       exact: true,
     })
     .click();
@@ -386,7 +386,7 @@ test("legacy default save automatically gets music, reveal and history without l
   await expect(page.locator(".score").first()).toHaveText("700");
   await page
     .getByRole("button", {
-      name: "Was ist das für ein Song?, 500 Punkte",
+      name: "Was ist das für ein Song?, 1000 Punkte",
       exact: true,
     })
     .click();
@@ -397,7 +397,7 @@ test("legacy default save automatically gets music, reveal and history without l
   await page.getByRole("button", { name: "Zum Board ✓" }).click();
   await page
     .getByRole("button", {
-      name: "Jugendhaus-Geschichte, 100 Punkte",
+      name: "Jugendhaus-Geschichte, 200 Punkte",
       exact: true,
     })
     .click();
@@ -568,7 +568,7 @@ test("requested board swap updates songs, history, Imnau and marathon in saved s
   await page.getByRole("button", { name: "Board 2", exact: true }).click();
   await page
     .getByRole("button", {
-      name: "Was ist das für ein Song?, 100 Punkte",
+      name: "Was ist das für ein Song?, 200 Punkte",
       exact: true,
     })
     .click();
@@ -586,4 +586,27 @@ test("requested board swap updates songs, history, Imnau and marathon in saved s
     "/media/songs/song-5.mp3",
   );
   await expect(page.locator(".score").first()).toHaveText("800");
+});
+
+test('Board 2 doubles displayed values, active scoring and manual steps without compounding on reload',async({page})=>{
+  await page.goto('/');
+  await page.getByRole('button',{name:'JZ Punkte hinzufügen',exact:true}).click();
+  await expect(page.locator('.score').first()).toHaveText('100');
+  page.once('dialog',d=>d.accept());await page.getByRole('button',{name:'Board 2',exact:true}).click();
+  await page.getByRole('button',{name:'Sport, aber wild, 600 Punkte',exact:true}).click();
+  await expect(page.locator('.question-meta strong')).toHaveText('600 PUNKTE');
+  await page.getByRole('button',{name:'JZ Punkte hinzufügen',exact:true}).click();
+  await expect(page.locator('.score').first()).toHaveText('700');
+  await page.reload();
+  await expect(page.locator('.question-meta strong')).toHaveText('600 PUNKTE');
+  await page.getByRole('button',{name:'JZ Punkte abziehen',exact:true}).click();
+  await expect(page.locator('.score').first()).toHaveText('100');
+  await page.getByRole('button',{name:'Zum Board ✓'}).click();
+  await page.getByRole('combobox',{name:'Punkteschritt'}).selectOption('1000');
+  await page.getByRole('button',{name:'JZ Punkte abziehen',exact:true}).click();
+  await expect(page.locator('.score').first()).toHaveText('-900');
+  await page.getByRole('button',{name:'Board 1',exact:true}).click();
+  await expect(page.getByRole('combobox',{name:'Punkteschritt'})).toHaveValue('500');
+  await page.getByRole('button',{name:'JZ Punkte hinzufügen',exact:true}).click();
+  await expect(page.locator('.score').first()).toHaveText('-400');
 });

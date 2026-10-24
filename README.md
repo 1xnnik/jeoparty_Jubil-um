@@ -101,3 +101,7 @@ Song-Reihenfolge: 100 Journey, 200 Queen, 300 ABBA, 400 Michael Jackson, 500 LMF
 **Was passiert in Imnau?** verwendet eure Angaben: Eyach, Apollo-Quelle, Kurortstatus verloren 2022, Hallenbad geschlossen 2022, Fürstenbau 1733.
 
 **Sport 500** fragt nach Eliud Kipchoges Sub-2-Stunden-Lauf in Wien 2019: 1:59:40,2. Dieser Sonderlauf zählt nicht als offizieller Wettkampf-Weltrekord. Dadurch ist die gefragte Leistung klar von offiziellen Marathonrekorden getrennt.
+
+## Double Points auf Board 2
+
+Board 1 zählt normal. Board 2 verdoppelt alle Fragewerte: **200, 400, 600, 800, 1.000 Punkte**. Anzeige und manuelle Plus-/Minus-Buttons verwenden denselben verdoppelten Wert. Ohne aktive Frage bietet der Punkteschritt auf Board 2 ebenfalls 200 bis 1.000 an. Die Verdopplung wird bei der Anzeige und Punktevergabe berechnet; gespeicherte und exportierte Fragen behalten ihre Basiswerte. Der Frageneditor zeigt die effektiven Punkte des gewählten Boards. Bestehende Team-Punktestände werden nicht nachträglich verdoppelt.

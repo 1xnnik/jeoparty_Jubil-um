@@ -1,3 +1,4 @@
+import { boardPoints, currentPoints } from "./data";
 import type { Game, Question } from "./data";
 import type { Dispatch, SetStateAction } from "react";
 type Props = {
@@ -23,20 +24,20 @@ export function Scoreboard({
         <div className="score-tools">
           {active ? (
             <span>
-              Aktuelle Frage: <strong>{active.value} Punkte</strong>
+              Aktuelle Frage: <strong>{currentPoints(game, active)} Punkte</strong>
             </span>
           ) : (
             <label>
               Punkteschritt{" "}
               <select
                 aria-label="Punkteschritt"
-                value={game.step}
+                value={boardPoints(game.board, game.step)}
                 onChange={(e) =>
-                  setGame((g) => ({ ...g, step: Number(e.target.value) }))
+                  setGame((g) => ({ ...g, step: Number(e.target.value) / (game.board === 1 ? 2 : 1) }))
                 }
               >
                 {[100, 200, 300, 400, 500].map((n) => (
-                  <option key={n}>{n}</option>
+                  <option key={n}>{boardPoints(game.board, n)}</option>
                 ))}
               </select>
             </label>

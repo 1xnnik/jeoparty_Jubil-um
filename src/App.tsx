@@ -1,6 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
 import {
   freshGame,
+  boardPoints,
+  currentPoints,
   validateBoards,
   validMedia,
   type Game,
@@ -133,7 +135,7 @@ export default function App() {
     return () => clearTimeout(t);
   }, [notice]);
   function changeScore(id: string, sign: number) {
-    const delta = (active?.value ?? game.step) * sign;
+    const delta = currentPoints(game, active) * sign;
     setGame((g) => ({
       ...g,
       teams: g.teams.map((t) =>
@@ -405,7 +407,7 @@ export default function App() {
                     }}
                   >
                     {b.name}
-                    <span>{i === 0 ? "I" : "II"}</span>
+                    <span>{i === 0 ? "I" : "II · 2×"}</span>
                   </button>
                 ))}
               </div>
@@ -420,7 +422,7 @@ export default function App() {
                       )?.name
                     }
                   </span>
-                  <strong>{active.value} PUNKTE</strong>
+                  <strong>{currentPoints(game, active)} PUNKTE</strong>
                 </div>
                 <h2>{active.text}</h2>
                 <QuestionMedia
@@ -453,12 +455,12 @@ export default function App() {
                           className={`tile ${game.played.includes(q.id) ? "played" : ""}`}
                           disabled={game.played.includes(q.id)}
                           onClick={() => open(q)}
-                          aria-label={`${c.name}, ${q.value} Punkte${game.played.includes(q.id) ? ", gespielt" : ""}`}
+                          aria-label={`${c.name}, ${boardPoints(game.board, q.value)} Punkte${game.played.includes(q.id) ? ", gespielt" : ""}`}
                         >
                           {game.played.includes(q.id) ? (
                             <span className="check">✓</span>
                           ) : (
-                            q.value
+                            boardPoints(game.board, q.value)
                           )}
                         </button>
                       ))}
@@ -622,7 +624,7 @@ export default function App() {
                     editCategory
                   ].questions.map((q, i) => (
                     <option key={i} value={i}>
-                      {i + 1} · {q.value} Punkte
+                      {i + 1} · {boardPoints(editBoard, q.value)} Punkte
                     </option>
                   ))}
                 </select>
@@ -656,14 +658,15 @@ export default function App() {
                 Punkte
                 <input
                   type="number"
-                  min="1"
-                  max="100000"
-                  value={selected.value}
+                  min={editBoard === 1 ? 2 : 1}
+                  max={editBoard === 1 ? 200000 : 100000}
+                  step={editBoard === 1 ? 2 : 1}
+                  value={boardPoints(editBoard, selected.value)}
                   onChange={(e) =>
                     editQ({
                       value: Math.min(
                         100000,
-                        Math.max(1, Math.round(Number(e.target.value))),
+                        Math.max(1, Math.round(Number(e.target.value) / (editBoard === 1 ? 2 : 1))),
                       ),
                     })
                   }

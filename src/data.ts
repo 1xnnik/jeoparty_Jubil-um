@@ -26,6 +26,13 @@ export type Game = {
   logo: string;
   revealTimingVersion?: number;
 };
+export function boardPoints(boardIndex: number, basePoints: number): number {
+  return basePoints * (boardIndex === 1 ? 2 : 1);
+}
+export function currentPoints(game: Game, question?: Question): number {
+  const questionBoard = question ? game.boards.findIndex(b => b.categories.some(c => c.questions.some(q => q.id === question.id))) : game.board;
+  return boardPoints(questionBoard, question?.value ?? game.step);
+}
 export function freshGame(): Game {
   return {
     boards: structuredClone(defaultBoards),
