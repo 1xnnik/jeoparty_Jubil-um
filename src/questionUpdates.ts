@@ -1,3 +1,4 @@
+import { priorStandardBoards } from "./priorStandardBoards";
 import { incorrectBoardTwo } from "./incorrectBoardTwo";
 import { previousBoardTwo } from "./previousBoardTwo";
 import type { Board, Game } from "./data";
@@ -30,19 +31,22 @@ export function isOriginalQuestionSet(boards: Board[]) {
   return normalized(boards) === normalized(legacyBoards);
 }
 export function needsQuestionUpdate(boards: Board[]) {
-  return boards[0].categories.slice(0, 4).some((category, index) => {
-    const expected = defaultBoards[0].categories[index];
-    if (category.name !== expected.name) return true;
-    if (index === 0)
-      return category.questions.some((q) => !q.reveal || !q.image);
-    if (index === 1)
-      return category.questions.some(
-        (q) => !q.audio || q.answer.startsWith("OFFEN:"),
+  const categories = boards.flatMap((b) => b.categories);
+  return defaultBoards
+    .flatMap((b) => b.categories)
+    .some((expected) => {
+      const category = categories.find(
+        (c) => c.questions[0]?.id === expected.questions[0].id,
       );
-    if (index === 3)
+      if (!category || category.name !== expected.name) return true;
+      if (expected.questions.some((q) => q.audio))
+        return category.questions.some(
+          (q) => !q.audio || q.answer.startsWith("OFFEN:"),
+        );
+      if (expected.questions.some((q) => q.reveal))
+        return category.questions.some((q) => !q.reveal || !q.image);
       return category.questions.some((q) => q.text.startsWith("VORLAGE"));
-    return false;
-  });
+    });
 }
 export function updatedGame(game: Game): Game {
   return {
@@ -54,14 +58,69 @@ export function updatedGame(game: Game): Game {
   };
 }
 
-export function hasPreviousBoardTwo(boards: Board[]) {
-  return normalized([boards[1]]) === normalized([previousBoardTwo]) || normalized([boards[1]]) === normalized([incorrectBoardTwo]);
-}
-export function refreshBoardTwo(game: Game): Game {
-  const newQuestions = defaultBoards[1].categories.flatMap(c => c.questions);
-  const changedIds = new Set(game.boards[1].categories.flatMap(c => c.questions).filter(q => {
-    const next = newQuestions.find(n => n.id === q.id);
-    return !next || next.text !== q.text || next.answer !== q.answer || next.value !== q.value;
-  }).map(q => q.id));
-  return {...game,boards:[game.boards[0],structuredClone(defaultBoards[1])],played:game.played.filter(id => !changedIds.has(id)),active:game.active && changedIds.has(game.active) ? null : game.active};
+// Match shipped categories exactly. Edited categories remain untouched.
+export function migrateStandardBoards(game: Game): Game | null {
+  const shipped = [
+    ...priorStandardBoards,
+    previousBoardTwo,
+    incorrectBoardTwo,
+  ].flatMap((b) => b.categories);
+  const targets = defaultBoards.flatMap((b) => b.categories);
+  const normalizeCategory = (category: Board["categories"][number]) =>
+    normalized([{ name: "", categories: [category] }]);
+  const boards = game.boards.map((board) => ({
+    ...board,
+    categories: board.categories.map((category) => {
+      if (
+        !shipped.some(
+          (old) => normalizeCategory(old) === normalizeCategory(category),
+        )
+      )
+        return category;
+      const next = targets.find(
+        (c) => c.questions[0].id === category.questions[0]?.id,
+      );
+      return next ? structuredClone(next) : category;
+    }),
+  }));
+  const oldOrder =
+    boards[0].categories[0].questions[0]?.id === "0-0-0" &&
+    boards[1].categories[0].questions[0]?.id === "1-0-0";
+  if (oldOrder) boards.reverse();
+  boards.forEach((b, i) => {
+    b.name = `Board ${i + 1}`;
+  });
+  if (normalized(boards) === normalized(game.boards)) return null;
+  const newQuestions = boards.flatMap((b) =>
+    b.categories.flatMap((c) => c.questions),
+  );
+  const changed = new Set(
+    game.boards
+      .flatMap((b) => b.categories.flatMap((c) => c.questions))
+      .filter((q) => {
+        const next = newQuestions.find((n) => n.id === q.id);
+        return (
+          !next ||
+          next.text !== q.text ||
+          next.answer !== q.answer ||
+          next.audio !== q.audio ||
+          next.image !== q.image ||
+          next.value !== q.value
+        );
+      })
+      .map((q) => q.id),
+  );
+  const active = game.active && !changed.has(game.active) ? game.active : null;
+  const activeBoard = active
+    ? boards.findIndex((b) =>
+        b.categories.some((c) => c.questions.some((q) => q.id === active)),
+      )
+    : -1;
+  return {
+    ...game,
+    boards,
+    active,
+    board: activeBoard >= 0 ? activeBoard : oldOrder ? 0 : game.board,
+    played: game.played.filter((id) => !changed.has(id)),
+  };
 }

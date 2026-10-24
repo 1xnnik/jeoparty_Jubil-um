@@ -14,8 +14,7 @@ import {
   isOriginalQuestionSet,
   needsQuestionUpdate,
   updatedGame,
-  hasPreviousBoardTwo,
-  refreshBoardTwo,
+  migrateStandardBoards,
 } from "./questionUpdates";
 function load(): Game {
   try {
@@ -24,10 +23,19 @@ function load(): Game {
       const g = JSON.parse(s);
       g.boards = validateBoards(g.boards);
       if (g.revealTimingVersion !== 1) {
-        const portraits = freshGame().boards[0].categories[0].questions;
-        for (const b of g.boards) for (const c of b.categories) for (const q of c.questions) {
-          if (q.reveal && q.revealSeconds === 60 && portraits.some(p => p.image === q.image)) q.revealSeconds = 10;
-        }
+        const portraits = freshGame()
+          .boards.flatMap((b) => b.categories.flatMap((c) => c.questions))
+          .filter((q) => q.reveal);
+        for (const b of g.boards)
+          for (const c of b.categories)
+            for (const q of c.questions) {
+              if (
+                q.reveal &&
+                q.revealSeconds === 60 &&
+                portraits.some((p) => p.image === q.image)
+              )
+                q.revealSeconds = 10;
+            }
         g.revealTimingVersion = 1;
       }
       if (
@@ -59,9 +67,18 @@ function load(): Game {
           /* Keep the existing game when backup storage is unavailable. */
         }
       }
-      if (hasPreviousBoardTwo(g.boards)) {
-        try { localStorage.setItem(BACKUP_KEY, s); return refreshBoardTwo({...freshGame(),...g,logo: !g.logo || g.logo === "/logo.svg" ? freshGame().logo : g.logo}); }
-        catch { /* Preserve the old board if its backup cannot be saved. */ }
+      const migrated = migrateStandardBoards({
+        ...freshGame(),
+        ...g,
+        logo: !g.logo || g.logo === "/logo.svg" ? freshGame().logo : g.logo,
+      });
+      if (migrated) {
+        try {
+          localStorage.setItem(BACKUP_KEY, s);
+          return migrated;
+        } catch {
+          /* Preserve edited questions if backup storage is unavailable. */
+        }
       }
       return {
         ...freshGame(),
@@ -565,7 +582,7 @@ export default function App() {
             </div>
             <p>
               Vor der Veranstaltung alle Fragen und Medien prüfen. Bei der
-              Mitgliederfrage bitte den Bezugszeitpunkt ergänzen. Alle fünf
+              Mitgliederfrage sind 130 bis 132 Mitglieder richtig. Alle fünf
               Songs sind lokal eingebunden.
             </p>
             <div className="editor-selects">

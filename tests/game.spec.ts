@@ -5,7 +5,7 @@ test("manual scoring, answered questions, persistence and board change", async (
   await page.goto("/");
   await expect(page.locator(".tile")).toHaveCount(25);
   await page
-    .getByRole("button", { name: "Kreuz & quer, 300 Punkte", exact: true })
+    .getByRole("button", { name: "Schätz mal!, 300 Punkte", exact: true })
     .click();
   await expect(page.locator(".question-view")).toBeVisible();
   await page
@@ -15,7 +15,7 @@ test("manual scoring, answered questions, persistence and board change", async (
   await page
     .getByRole("button", { name: "Antwort anzeigen", exact: true })
     .click();
-  await expect(page.locator(".answer")).toContainText("World Wide Web");
+  await expect(page.locator(".answer")).toContainText("42,195");
   await expect(page.locator(".score").first()).toHaveText("300");
   await page
     .getByRole("button", { name: "JZ Punkte abziehen", exact: true })
@@ -41,7 +41,7 @@ test("manual scoring, answered questions, persistence and board change", async (
   await expect(page.locator(".played")).toHaveCount(1);
   page.once("dialog", (d) => d.accept());
   await page.getByRole("button", { name: "Board 2", exact: true }).click();
-  await expect(page.locator(".category h3").first()).toHaveText("Schätz mal!");
+  await expect(page.locator(".category h3").first()).toHaveText("Wer ist das?");
   await expect(page.locator(".score").first()).toHaveText("500");
   const footer = await page.locator(".scoreboard").boundingBox();
   expect(footer!.y + footer!.height).toBeLessThanOrEqual(1081);
@@ -110,7 +110,7 @@ test("local-only assets, mobile layout and reduced question controls", async ({
   });
   await page.goto("/");
   await page
-    .getByRole("button", { name: "Kreuz & quer, 100 Punkte", exact: true })
+    .getByRole("button", { name: "Schätz mal!, 100 Punkte", exact: true })
     .click();
   await expect(page.getByRole("timer")).toHaveCount(0);
   await expect(
@@ -203,6 +203,8 @@ test("person pictures reveal slowly, pause, restart and show the answer without 
   );
   await page.clock.install();
   await page.goto("/");
+  page.once("dialog", (d) => d.accept());
+  await page.getByRole("button", { name: "Board 2", exact: true }).click();
   await page
     .getByRole("button", { name: "Wer ist das?, 500 Punkte", exact: true })
     .click();
@@ -268,6 +270,8 @@ test("local audio plays only on request and stops on closing the question", asyn
     route.fulfill({ contentType: "audio/wav", body: wav }),
   );
   await page.goto("/");
+  page.once("dialog", (d) => d.accept());
+  await page.getByRole("button", { name: "Board 2", exact: true }).click();
   await page
     .getByRole("button", {
       name: "Was ist das für ein Song?, 100 Punkte",
@@ -303,7 +307,7 @@ test("new question set preserves saved edits until confirmed and exports media s
   await page
     .getByRole("button", { name: "Neue Jubiläumsfragen laden", exact: true })
     .click();
-  await expect(page.getByLabel("Kategoriename")).toHaveValue("Wer ist das?");
+  await expect(page.getByLabel("Kategoriename")).toHaveValue("Schätz mal!");
   await expect(page.locator(".score").first()).toHaveText("100");
   const pending = page.waitForEvent("download");
   await page.getByRole("button", { name: "JSON exportieren" }).click();
@@ -312,7 +316,7 @@ test("new question set preserves saved edits until confirmed and exports media s
   for await (const c of stream) chunks.push(Buffer.from(c));
   const data = JSON.parse(Buffer.concat(chunks).toString());
   expect(
-    data.boards[0].categories[0].questions.map((q: any) => q.answer),
+    data.boards[1].categories[0].questions.map((q: any) => q.answer),
   ).toEqual([
     "Matthias Steiner",
     "Wolfgang Grupp",
@@ -320,9 +324,9 @@ test("new question set preserves saved edits until confirmed and exports media s
     "Wolfgang Petry",
     "Leon",
   ]);
-  expect(data.boards[0].categories[0].questions[0].revealSeconds).toBe(10);
+  expect(data.boards[1].categories[0].questions[0].revealSeconds).toBe(10);
   expect(
-    data.boards[0].categories[1].questions.filter((q: any) => q.audio),
+    data.boards[1].categories[1].questions.filter((q: any) => q.audio),
   ).toHaveLength(5);
   page.once("dialog", (d) => d.accept());
   await page
@@ -333,10 +337,13 @@ test("new question set preserves saved edits until confirmed and exports media s
       buffer: Buffer.from(JSON.stringify(data)),
     });
   await expect(page.getByRole("status")).toContainText("50 Fragen importiert");
+  await page
+    .getByRole("combobox", { name: "Board", exact: true })
+    .selectOption("1");
   await expect(
     page.getByLabel("Bild langsam enthüllen", { exact: true }),
   ).toBeChecked();
-  data.boards[0].categories[1].questions[0].audio =
+  data.boards[1].categories[1].questions[0].audio =
     "https://example.com/song.mp3";
   await page
     .locator('input[type=file][accept="application/json,.json"]')
@@ -371,6 +378,8 @@ test("legacy default save automatically gets music, reveal and history without l
     );
   }, legacyBoards);
   await page.goto("/");
+  page.once("dialog", (d) => d.accept());
+  await page.getByRole("button", { name: "Board 2", exact: true }).click();
   await expect(page.locator(".category h3").nth(1)).toHaveText(
     "Was ist das für ein Song?",
   );
@@ -383,12 +392,12 @@ test("legacy default save automatically gets music, reveal and history without l
     .click();
   await expect(page.locator("audio")).toHaveAttribute(
     "src",
-    "/media/songs/song-5.mp3",
+    "/media/songs/song-1.mp3",
   );
   await page.getByRole("button", { name: "Zum Board ✓" }).click();
   await page
     .getByRole("button", {
-      name: "Jugendhaus-Geschichte, 200 Punkte",
+      name: "Jugendhaus-Geschichte, 100 Punkte",
       exact: true,
     })
     .click();
@@ -439,41 +448,142 @@ test("custom old save offers a visible update and backs up edits before replacem
       exact: true,
     })
     .click();
-  await expect(page.locator(".category h3").first()).toHaveText("Wer ist das?");
+  await expect(page.locator(".category h3").first()).toHaveText("Schätz mal!");
   await expect(page.locator(".score").first()).toHaveText("900");
   expect(
     await page.evaluate(
       () =>
         JSON.parse(
           localStorage.getItem("bad-imnau-jeopardy-v1-before-question-update")!,
-        ).boards[0].categories[0].questions[0].text,
+        )
+          .boards.flatMap((b: any) =>
+            b.categories.flatMap((c: any) => c.questions),
+          )
+          .find((q: any) => q.id === "0-0-0").text,
     ),
   ).toBe("Meine eigene Frage");
 });
 
-test('updated Board 2 changes only eight crossed-out questions and preserves Board 1 and scores', async ({page}) => {
-  const {previousBoardTwo}=await import('../src/previousBoardTwo');
-  const {incorrectBoardTwo}=await import('../src/incorrectBoardTwo');
-  const {defaultBoards}=await import('../src/questions');
-  const oldQuestions=previousBoardTwo.categories.flatMap(c=>c.questions);
-  const newQuestions=defaultBoards[1].categories.flatMap(c=>c.questions);
+test("updated Board 2 changes only eight crossed-out questions and preserves Board 1 and scores", async ({
+  page,
+}) => {
+  const { previousBoardTwo } = await import("../src/previousBoardTwo");
+  const { incorrectBoardTwo } = await import("../src/incorrectBoardTwo");
+  const { defaultBoards } = await import("../src/questions");
+  const { priorStandardBoards } = await import("../src/priorStandardBoards");
+  const oldQuestions = previousBoardTwo.categories.flatMap((c) => c.questions);
+  const newQuestions = defaultBoards[0].categories.flatMap((c) => c.questions);
   expect(newQuestions).toHaveLength(25);
-  const changed=new Set(['1-2-0','1-2-1','1-2-3','1-3-0','1-3-1','1-3-2','1-3-3','1-4-4']);
-  newQuestions.forEach((q,i)=>{if(changed.has(q.id))expect(q.text).not.toBe(oldQuestions[i].text);else expect(q).toEqual(oldQuestions[i]);});
-  await page.goto('/');
-  await page.evaluate(oldBoard=>{
-    const key='bad-imnau-jeopardy-v1';const g=JSON.parse(localStorage.getItem(key)!);
-    g.boards[1]=oldBoard;g.boards[0].categories[2].questions[0].text='Meine eigene Sportfrage';
-    g.teams[0].score=1200;g.played=['0-2-0','1-0-0'];g.board=1;g.active='1-0-0';localStorage.setItem(key,JSON.stringify(g));
-  },incorrectBoardTwo);
+  const changed = new Set([
+    "1-2-0",
+    "1-2-1",
+    "1-2-3",
+    "1-3-0",
+    "1-3-1",
+    "1-3-2",
+    "1-3-3",
+    "1-4-4",
+  ]);
+  newQuestions.forEach((q, i) => {
+    if (changed.has(q.id)) expect(q.text).not.toBe(oldQuestions[i].text);
+    else expect(q).toEqual(oldQuestions[i]);
+  });
+  await page.goto("/");
+  await page.evaluate(
+    (oldBoard) => {
+      const key = "bad-imnau-jeopardy-v1";
+      const g = JSON.parse(localStorage.getItem(key)!);
+      g.boards = [oldBoard.original, oldBoard.incorrect];
+      g.boards[0].categories[2].questions[0].text = "Meine eigene Sportfrage";
+      g.teams[0].score = 1200;
+      g.played = ["0-2-0", "1-0-0"];
+      g.board = 1;
+      g.active = "1-0-0";
+      localStorage.setItem(key, JSON.stringify(g));
+    },
+    { original: priorStandardBoards[0], incorrect: incorrectBoardTwo },
+  );
   await page.reload();
-  await expect(page.locator('.question-view')).toHaveCount(0);
-  await expect(page.locator('.score').first()).toHaveText('1.200');
-  await page.getByRole('button',{name:'Schätz mal!, 100 Punkte',exact:true}).click();
-  await expect(page.locator('.question-view h2')).toContainText('Klavier');
-  await page.getByRole('button',{name:'Antwort anzeigen',exact:true}).click();
-  await expect(page.locator('.answer')).toContainText('88');
-  const saved=await page.evaluate(()=>JSON.parse(localStorage.getItem('bad-imnau-jeopardy-v1')!));
-  expect(saved.boards[0].categories[2].questions[0].text).toBe('Meine eigene Sportfrage');
-  expect(saved.played).toEqual(['0-2-0']);
+  await expect(page.locator(".question-view")).toHaveCount(0);
+  await expect(page.locator(".score").first()).toHaveText("1.200");
+  await page
+    .getByRole("button", { name: "Schätz mal!, 100 Punkte", exact: true })
+    .click();
+  await expect(page.locator(".question-view h2")).toContainText("Klavier");
+  await page
+    .getByRole("button", { name: "Antwort anzeigen", exact: true })
+    .click();
+  await expect(page.locator(".answer")).toContainText("88");
+  const saved = await page.evaluate(() =>
+    JSON.parse(localStorage.getItem("bad-imnau-jeopardy-v1")!),
+  );
+  expect(saved.boards[1].categories[2].questions[0].text).toBe(
+    "Meine eigene Sportfrage",
+  );
+  expect(saved.played).toEqual(["0-2-0"]);
+});
+
+test("requested board swap updates songs, history, Imnau and marathon in saved standard games", async ({
+  page,
+}) => {
+  const { priorStandardBoards } = await import("../src/priorStandardBoards");
+  await page.goto("/");
+  await page.evaluate((boards) => {
+    const key = "bad-imnau-jeopardy-v1";
+    const g = JSON.parse(localStorage.getItem(key)!);
+    g.boards = boards;
+    g.teams[0].score = 800;
+    g.played = ["0-1-0", "1-0-0"];
+    g.active = null;
+    g.board = 0;
+    localStorage.setItem(key, JSON.stringify(g));
+  }, priorStandardBoards);
+  await page.reload();
+  await expect(page.locator(".category h3").first()).toHaveText("Schätz mal!");
+  await expect(page.locator(".score").first()).toHaveText("800");
+  const game = await page.evaluate(() =>
+    JSON.parse(localStorage.getItem("bad-imnau-jeopardy-v1")!),
+  );
+  expect(game.played).toEqual(["1-0-0"]);
+  expect(
+    game.boards[1].categories[1].questions.map((q: any) => q.audio),
+  ).toEqual([5, 2, 4, 3, 1].map((i) => `/media/songs/song-${i}.mp3`));
+  expect(
+    game.boards[1].categories[3].questions.map((q: any) => q.answer),
+  ).toEqual([
+    "2015",
+    "Die 20. Karibische Nacht",
+    "2022",
+    "Sonja Schramm",
+    "131 Mitglieder. Akzeptiert: 130 bis 132 Mitglieder.",
+  ]);
+  expect(game.boards[1].categories[4].name).toBe("Was passiert in Imnau?");
+  expect(
+    game.boards[1].categories[4].questions.map((q: any) => q.answer),
+  ).toEqual(["Eyach", "Apollo-Quelle", "2022", "2022", "1733"]);
+  expect(game.boards[1].categories[2].questions[4].answer).toContain(
+    "1:59:40,2",
+  );
+  page.once("dialog", (d) => d.accept());
+  await page.getByRole("button", { name: "Board 2", exact: true }).click();
+  await page
+    .getByRole("button", {
+      name: "Was ist das für ein Song?, 100 Punkte",
+      exact: true,
+    })
+    .click();
+  await expect(page.locator("audio")).toHaveAttribute(
+    "src",
+    "/media/songs/song-5.mp3",
+  );
+  await page
+    .getByRole("button", { name: "Antwort anzeigen", exact: true })
+    .click();
+  await expect(page.locator(".answer")).toContainText("Journey");
+  await page.reload();
+  await expect(page.locator("audio")).toHaveAttribute(
+    "src",
+    "/media/songs/song-5.mp3",
+  );
+  await expect(page.locator(".score").first()).toHaveText("800");
 });

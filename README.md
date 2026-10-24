@@ -29,7 +29,7 @@ Nach der Installation benötigt das laufende Spiel keine Internetverbindung. All
 ## Veranstaltung vorbereiten
 
 1. Unter **Teams** zwei bis sechs Teamnamen einstellen.
-2. Im **Frageneditor** alle Fragen prüfen. Die Jugendhaus-Antworten stammen aus euren Angaben; bei der Mitgliederfrage vor dem Spiel den Bezugszeitpunkt ergänzen.
+2. Im **Frageneditor** alle Fragen prüfen. Die Jugendhaus-Antworten stammen aus euren Angaben; bei der Mitgliederfrage gilt die Toleranz von ±1 Mitglied.
 3. Das Original-Logo aus `media/logo.png` ist fest eingebunden und funktioniert auch offline. Bereits gespeicherte Spiele mit dem alten Platzhalter übernehmen es automatisch. Ein optionaler Logo-Upload im Editor überschreibt das Standardlogo nur im aktuellen Browser. Logos bleiben unverzerrt und auf allen Ansichten sichtbar.
 4. Fragen als JSON exportieren und separat sichern. JSON enthält beide Boards und eingebettete Medien, aber keine Teams, Punkte oder Logo.
 5. Ein komplettes Testspiel auf dem Veranstaltungsgerät durchführen und Beamer prüfen.
@@ -69,8 +69,8 @@ Die Browserprüfungen verwenden Chromium unter `/usr/bin/chromium`. Auf anderen 
 
 ## Neues Jubiläums-Fragenset
 
-Board 1: **Wer ist das?**, **Was ist das für ein Song?**, **Sport, aber wild**, **Jugendhaus-Geschichte**, **Kreuz & quer**.
-Board 2: **Schätz mal!**, **Wahr oder Quatsch?**, **Damals & heute**, **Filmreif**, **Kurios, aber wahr**.
+Board 1: **Schätz mal!**, **Wahr oder Quatsch?**, **Damals & heute**, **Filmreif**, **Kurios, aber wahr**.
+Board 2: **Wer ist das?**, **Was ist das für ein Song?**, **Sport, aber wild**, **Jugendhaus-Geschichte**, **Was passiert in Imnau?**.
 
 Unveränderte ursprüngliche Standardfragen im Browser werden automatisch auf die neuen Musik-, Bild- und Jugendhaus-Fragen aktualisiert. Zuerst wird der alte Stand lokal gesichert; Teamnamen und Punkte bleiben erhalten. Bei eigenen oder anderen älteren Fragen erscheint direkt über dem Spielfeld der Hinweis **Neue Kategorien sind verfügbar** mit dem Button **Musik-, Bild- und Jugendhaus-Fragen laden**. Die Aktualisierung benötigt dann eine Bestätigung und sichert die bisherigen Fragen. Auch im Editor steht **Neue Jubiläumsfragen laden** zur Verfügung. Dort kann die lokale Sicherung anschließend über **Vorherige Fragen exportieren** heruntergeladen werden. Ist der Browser-Speicher voll, wird nichts ersetzt. Gespielte Felder werden bei Aktualisierung zurückgesetzt. Neue Browser starten direkt mit dem neuen Set.
 
@@ -86,8 +86,18 @@ Alle fünf Songs sind als echte MP3s unter `public/media/songs/song-1.mp3` bis `
 
 ### Wann war das?
 
-Die fünf Jugendhaus-Fragen verwenden eure Angaben: 131 Mitglieder (Bezugszeitpunkt noch im Editor ergänzen), Renovierung 2015, Besucherrekord bei der Karibischen Nacht 2022 mit rund 900 Gästen, 20. Karibische Nacht im Jahr 2022 sowie Sonja Schramm als Vorstand 2007.
+Die fünf Jugendhaus-Fragen verwenden eure Angaben: 100 Punkte: Renovierung 2015; 200: 20. Karibische Nacht 2022; 300: Besucherrekord 2022 mit rund 900 Gästen; 400: Sonja Schramm 2007; 500: 131 Mitglieder, akzeptiert werden 130 bis 132.
 
-### Gezielte Änderungen auf Board 2
+### Gezielte Änderungen auf dem Allgemeinwissensboard (jetzt Board 1)
 
 Nur acht markierte Fragen sind neu: **Damals & heute** 100, 200 und 400; **Filmreif** 100, 200, 300 und 400; **Kurios, aber wahr** 500. Die übrigen 17 Fragen entsprechen wieder dem ursprünglichen Set. Ein gespeichertes unverändertes ursprüngliches Board 2 oder das versehentlich veröffentlichte vollständig ersetzte Board 2 wird nach lokaler Sicherung automatisch auf diese Auswahl korrigiert. Board 1, Teams und Punkte bleiben erhalten. Nur die tatsächlich geänderten Felder werden wieder spielbar. Eigene Änderungen auf Board 2 werden nicht automatisch überschrieben.
+
+## Neue Reihenfolge und lokale Aktualisierung
+
+Die Boards sind getauscht. Die internen Fragen-IDs bleiben stabil; sie müssen nicht mit der sichtbaren Board-Nummer beginnen. Alte gespeicherte Standardkategorien werden nach lokaler Sicherung auf die neue Reihenfolge und Inhalte aktualisiert. Eigene Kategorien mit bearbeiteten Fragen bleiben erhalten. Punktestände bleiben erhalten; nur inhaltlich geänderte Fragen werden wieder spielbar. Ein unverändertes aktives Feld bleibt auf seinem neuen Board geöffnet. Bei eigenen abweichenden Kategorien kann im Editor das komplette aktuelle Standardset ausdrücklich geladen werden.
+
+Song-Reihenfolge: 100 Journey, 200 Queen, 300 ABBA, 400 Michael Jackson, 500 LMFAO feat. Lauren Bennett & GoonRock. Die ursprünglichen Dateinamen song-1.mp3 bis song-5.mp3 bleiben erhalten; die Fragen verweisen auf die passende Datei.
+
+**Was passiert in Imnau?** verwendet eure Angaben: Eyach, Apollo-Quelle, Kurortstatus verloren 2022, Hallenbad geschlossen 2022, Fürstenbau 1733.
+
+**Sport 500** fragt nach Eliud Kipchoges Sub-2-Stunden-Lauf in Wien 2019: 1:59:40,2. Dieser Sonderlauf zählt nicht als offizieller Wettkampf-Weltrekord. Dadurch ist die gefragte Leistung klar von offiziellen Marathonrekorden getrennt.
