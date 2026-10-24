@@ -20,7 +20,7 @@ function load(): Game {
     const s = localStorage.getItem(KEY);
     if (s) {
       const g = JSON.parse(s);
-      validateBoards(g.boards);
+      g.boards = validateBoards(g.boards);
       if (
         !Array.isArray(g.teams) ||
         g.teams.length < 2 ||

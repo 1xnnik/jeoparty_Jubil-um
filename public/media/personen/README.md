@@ -1,11 +1,11 @@
 # Personenbilder
 
-Die fünf im Chat gezeigten Originalbilder bitte unter diesen Namen ablegen (oder im Editor lokal hochladen):
+Die fünf Originalbilder sind lokal eingebunden:
 
-- matthias-steiner.jpg — 100 Punkte (leicht)
-- wolfgang-grupp.jpg — 200 Punkte
-- thomas-mueller.jpg — 300 Punkte
-- wolfgang-petry.jpg — 400 Punkte
-- leon.jpg — 500 Punkte (schwer)
+- matthias-steiner.png — 100 Punkte (leicht)
+- wolfgang-grupp.png — 200 Punkte
+- thomas-mueller.png — 300 Punkte
+- wolfgang-petry.png — 400 Punkte
+- leon.png — 500 Punkte (schwer)
 
-Die Dateiendung muss zum tatsächlichen Dateiformat passen; gegebenenfalls Bildpfad im Editor ändern. Die Bilder werden nicht mit vorab berechnetem Blur gespeichert: Die Anwendung enthüllt sie lokal über 60 Sekunden. Namen erscheinen nur in der Antwort, nicht im Alternativtext.
+Die Bilder werden über 60 Sekunden automatisch scharf. Alte gespeicherte oder importierte Fragen mit den früheren .jpg-Platzhalterpfaden werden auf die entsprechenden .png-Dateien umgestellt. Eigene Bilder und Fragen bleiben erhalten.

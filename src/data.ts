@@ -41,6 +41,11 @@ export function freshGame(): Game {
     logo: logoUrl,
   };
 }
+// Repair only the five previously shipped JPG placeholders; preserve custom images.
+export function personImagePath(image?: string) {
+  const names = ["leon", "matthias-steiner", "thomas-mueller", "wolfgang-grupp", "wolfgang-petry"];
+  return names.some(name => image === `/media/personen/${name}.jpg`) ? image!.replace(/\.jpg$/, ".png") : image;
+}
 export function validateBoards(input: unknown): Board[] {
   const boards = (input as { boards?: unknown })?.boards ?? input;
   if (!Array.isArray(boards) || boards.length !== 2)
@@ -100,7 +105,7 @@ export function validateBoards(input: unknown): Board[] {
               value: q.value,
               text: q.text,
               answer: q.answer,
-              image: q.image,
+              image: personImagePath(q.image),
               video: q.video,
               audio: q.audio,
               reveal: q.reveal,

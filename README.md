@@ -76,7 +76,7 @@ Unveränderte ursprüngliche Standardfragen im Browser werden automatisch auf di
 
 ### Personenrunde
 
-100 Punkte: Matthias Steiner, 200: Wolfgang Grupp, 300: Thomas Müller, 400: Wolfgang Petry, 500: Leon. Originalfotos unter `public/media/personen/` ergänzen (Dateinamen siehe dortige README) oder im Editor hochladen. Die Chatbilder waren nicht als Dateien verfügbar und sind daher noch nicht eingebunden. Fehlende Bilder werden im Spiel deutlich gemeldet.
+100 Punkte: Matthias Steiner, 200: Wolfgang Grupp, 300: Thomas Müller, 400: Wolfgang Petry, 500: Leon. Alle fünf Originalfotos sind als PNG unter `public/media/personen/` fest eingebunden (Dateinamen siehe dortige README). Frühere .jpg-Platzhalterpfade in gespeicherten oder importierten Fragen werden automatisch auf die vorhandenen PNGs korrigiert. Eigene Bilder können weiterhin im Editor hochgeladen werden.
 
 Jedes Bild startet nach dem Laden stark verschwommen und wird automatisch über 60 Sekunden scharf. Der Moderator kann die Enthüllung pausieren, fortsetzen oder zurücksetzen. Nach dem Zurücksetzen beginnt die Enthüllung erst beim erneuten Start. **Antwort anzeigen** zeigt die Person sofort scharf und blendet den Namen ein; Punkte bleiben ausschließlich manuell. Im Editor sind Bildenthüllung und Dauer (5–180 Sekunden) je Frage einstellbar. Beim Schließen oder Neuladen beginnt das Bild wieder verschwommen.
 
